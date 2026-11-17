@@ -1,0 +1,42 @@
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { LotteriesService } from './lotteries.service';
+
+@Controller('api')
+export class LotteriesController {
+  constructor(private readonly lotteriesService: LotteriesService) {}
+
+  @Get('lotteries')
+  async getLotteries(
+    @Query('category') category?: string,
+    @Query('schedule') schedule?: string,
+  ) {
+    return this.lotteriesService.findAll(category, schedule);
+  }
+
+  @Get('lotteries/:slug')
+  async getLotteryBySlug(@Param('slug') slug: string) {
+    return this.lotteriesService.findBySlug(slug);
+  }
+
+  @Get('results')
+  async getResults(
+    @Query('lotteryId') lotteryId?: number,
+    @Query('category') category?: string,
+    @Query('schedule') schedule?: string,
+    @Query('limit') limit?: number,
+    @Query('date') date?: string,
+  ) {
+    return this.lotteriesService.findResults({
+      lotteryId,
+      category,
+      schedule,
+      limit,
+      date,
+    });
+  }
+
+  @Get('results/latest')
+  async getLatestResults() {
+    return this.lotteriesService.getLatestResultsGrouped();
+  }
+}
