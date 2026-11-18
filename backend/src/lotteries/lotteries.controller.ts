@@ -5,6 +5,17 @@ import { LotteriesService } from './lotteries.service';
 export class LotteriesController {
   constructor(private readonly lotteriesService: LotteriesService) {}
 
+  @Get('health')
+  getHealth() {
+    return {
+      status: 'ok',
+      service: 'datachance-backend',
+      databaseUrlConfigured: !!process.env.DATABASE_URL,
+      directUrlConfigured: !!process.env.DIRECT_URL,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
   @Get('lotteries')
   async getLotteries(
     @Query('category') category?: string,
