@@ -1,17 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger, INestApplication } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
-import express, { Express } from 'express';
 
-const server: Express = express();
-let nestApp: INestApplication | null = null;
-
-export async function createNestServer(expressInstance: Express): Promise<INestApplication> {
-  if (nestApp) return nestApp;
-
-  const adapter = new ExpressAdapter(expressInstance);
-  const app = await NestFactory.create(AppModule, adapter);
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
 
   // Prefijo global para todas las rutas de la API (/api/...)
   app.setGlobalPrefix('api');
@@ -32,30 +25,10 @@ export async function createNestServer(expressInstance: Express): Promise<INestA
     }),
   );
 
-  await app.init();
-  nestApp = app;
-  return app;
+  const PORT = process.env.PORT ?? 3000;
+  await app.listen(PORT);
+  logger.log(`DataChance CO Backend escuchando en el puerto ${PORT}`);
+  logger.log(`API disponible en http://localhost:${PORT}/api`);
 }
 
-// Handler exportado para Vercel Serverless Functions
-export default async function handler(req: any, res: any) {
-  if (!nestApp) {
-    await createNestServer(server);
-  }
-  return server(req, res);
-}
-
-export { handler };
-
-// Para ejecución local independiente (cuando no se está en Vercel)
-if (!process.env.VERCEL) {
-  async function bootstrap() {
-    const logger = new Logger('Bootstrap');
-    const app = await createNestServer(server);
-    const PORT = process.env.PORT || 3001;
-    await app.listen(PORT);
-    logger.log(`DataChance CO Backend escuchando en http://localhost:${PORT}`);
-    logger.log(`API disponible en http://localhost:${PORT}/api`);
-  }
-  bootstrap();
-}
+bootstrap();
