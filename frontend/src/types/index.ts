@@ -120,10 +120,23 @@ export interface HybridResponse {
   };
 }
 
+export interface MathematicalAnalysis {
+  probabilityRatio: string;
+  probabilityFloat: number;
+  probabilityPercentage: string;
+  rtpPercent: number;
+  evPerPeso: number;
+  houseEdgePercent: number;
+  advantageParty: 'CASA' | 'JUGADOR';
+  breakevenMultiplierGross: number;
+  breakevenMultiplierNet: number;
+  breakevenDescription: string;
+}
+
 export interface CalculationResult {
   modality: string;
   modalityName: string;
-  gameType: 'CHANCE_TRADICIONAL' | 'SUPER_ASTRO';
+  gameType: 'CHANCE_TRADICIONAL' | 'SUPER_ASTRO' | 'BALOTO';
   gameName: string;
   betAmount: number;
   multiplier: number;
@@ -137,4 +150,61 @@ export interface CalculationResult {
   formattedNet: string;
   notes: string;
   allSigns?: boolean;
+  uvtValue: number;
+  uvtThresholdCop: number;
+  isTaxExempt: boolean;
+  mathAnalysis: MathematicalAnalysis;
+}
+
+export interface DelayedUnaItem {
+  digit: number;
+  drawsAgo: number;
+  status: 'CRITICAL' | 'HIGH' | 'MEDIUM';
+}
+
+export interface DelayedPataItem {
+  termination: string;
+  drawsAgo: number;
+}
+
+export interface DailyInsights {
+  lottery: {
+    id: number;
+    name: string;
+    slug: string;
+    category: string;
+    schedule: string;
+    playDays: string;
+  };
+  latestResult: {
+    number: string;
+    series: string | null;
+    drawDate: string;
+    invertedNumber: string;
+    mirrorNumber: string;
+  };
+  counterpartResult: {
+    name: string;
+    slug: string;
+    number: string;
+    drawDate: string;
+  } | null;
+  delayedStats: {
+    una: DelayedUnaItem[];
+    pata: DelayedPataItem[];
+    totalDrawsAnalyzed: number;
+  };
+  pyramidKey: {
+    dateFormatted: string;
+    leftDiagonal: string;
+    rightDiagonal: string;
+    apexCluster: string;
+    centerBase: string;
+  };
+  hybridRecommendation: {
+    primaryCombination: string;
+    secondaryCombination: string;
+    confidence: number;
+    rationale: string;
+  };
 }

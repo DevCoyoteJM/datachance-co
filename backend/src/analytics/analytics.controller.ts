@@ -27,4 +27,9 @@ export class AnalyticsController {
   async getStatisticalPrediction(@Query('lotteryId') lotteryId: string) {
     return this.analyticsService.generateStatisticalPrediction(Number(lotteryId));
   }
+
+  @Get('daily-insights/:slug')
+  async getDailyInsights(@Param('slug') slug: string) {
+    return this.analyticsService.getDailyInsights(slug);
+  }
 }

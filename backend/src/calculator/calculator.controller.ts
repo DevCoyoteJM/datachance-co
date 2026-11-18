@@ -10,11 +10,21 @@ export class CalculatorController {
     @Query('amount') amount?: string,
     @Query('gameType') gameType?: GameType,
     @Query('allSigns') allSigns?: string,
+    @Query('customMultiplier') customMultiplier?: string,
+    @Query('jackpot') jackpot?: string,
   ) {
     const betAmount = amount ? parseFloat(amount) : 2000;
     const isAllSigns = allSigns === 'true' || allSigns === '1';
-    const resolvedGameType = gameType === 'SUPER_ASTRO' ? 'SUPER_ASTRO' : 'CHANCE_TRADICIONAL';
+    const resolvedGameType = (gameType as GameType) || 'CHANCE_TRADICIONAL';
+    const parsedCustomMultiplier = customMultiplier ? parseFloat(customMultiplier) : undefined;
+    const parsedJackpot = jackpot ? parseFloat(jackpot) : undefined;
 
-    return this.calculatorService.calculate(betAmount, resolvedGameType, isAllSigns);
+    return this.calculatorService.calculate(
+      betAmount,
+      resolvedGameType,
+      isAllSigns,
+      parsedCustomMultiplier,
+      parsedJackpot,
+    );
   }
 }

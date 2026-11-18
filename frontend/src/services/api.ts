@@ -1,11 +1,11 @@
 import type {
   Lottery,
-  LotteryResult,
   LatestGroupedResult,
   LotteryStatsResponse,
   PyramidData,
   HybridResponse,
   CalculationResult,
+  DailyInsights,
 } from '../types';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -54,16 +54,27 @@ export const api = {
     return res.json();
   },
 
+  async getDailyInsights(slug: string): Promise<DailyInsights> {
+    const res = await fetch(`${API_BASE}/analytics/daily-insights/${slug}`);
+    if (!res.ok) throw new Error(`Error al obtener insights diarios para ${slug}`);
+    return res.json();
+  },
+
   async simulatePrize(
     amount: number,
     gameType = 'CHANCE_TRADICIONAL',
     allSigns = false,
+    customMultiplier?: number,
+    jackpot?: number,
   ): Promise<CalculationResult[]> {
     const params = new URLSearchParams({
       amount: amount.toString(),
       gameType,
       allSigns: allSigns ? 'true' : 'false',
     });
+    if (customMultiplier) params.append('customMultiplier', customMultiplier.toString());
+    if (jackpot) params.append('jackpot', jackpot.toString());
+
     const res = await fetch(`${API_BASE}/calculator/simulate?${params.toString()}`);
     if (!res.ok) throw new Error('Error al calcular premios');
     const data = await res.json();

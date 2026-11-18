@@ -5,6 +5,7 @@ import type {
   LatestGroupedResult,
   Lottery,
 } from '../types';
+import { DailyInsightsCard } from './DailyInsightsCard';
 import {
   Search,
   Filter,
@@ -101,6 +102,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Nueva Sección Destacada: Datos del Día (Análisis Híbrido) */}
+      <DailyInsightsCard />
 
       {/* Filter and Search Bar */}
       <div className="space-y-4">
