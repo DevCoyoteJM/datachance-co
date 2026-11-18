@@ -13,6 +13,24 @@ export class LotteriesController {
     return this.lotteriesService.findAll(category, schedule);
   }
 
+  @Get('lotteries/:slug/history')
+  async getLotteryHistory(
+    @Param('slug') slug: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('search') search?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return this.lotteriesService.getLotteryHistory(slug, {
+      page,
+      limit,
+      search,
+      startDate,
+      endDate,
+    });
+  }
+
   @Get('lotteries/:slug')
   async getLotteryBySlug(@Param('slug') slug: string) {
     return this.lotteriesService.findBySlug(slug);

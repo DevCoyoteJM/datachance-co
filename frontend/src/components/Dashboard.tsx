@@ -6,6 +6,7 @@ import type {
   Lottery,
 } from '../types';
 import { DailyInsightsCard } from './DailyInsightsCard';
+import { GlobalNumberChecker } from './GlobalNumberChecker';
 import {
   Search,
   Filter,
@@ -105,6 +106,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       {/* Nueva Sección Destacada: Datos del Día (Análisis Híbrido) */}
       <DailyInsightsCard />
+
+      {/* Buscador Global "Verifica tu Número" (Historial 360° Colombia) */}
+      <GlobalNumberChecker />
 
       {/* Filter and Search Bar */}
       <div className="space-y-4">

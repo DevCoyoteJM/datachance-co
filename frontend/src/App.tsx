@@ -5,6 +5,7 @@ import { StatsAnalyzer } from './components/StatsAnalyzer';
 import { HybridGenerator } from './components/HybridGenerator';
 import { Calculator } from './components/Calculator';
 import { LegalFooter } from './components/LegalFooter';
+import { SavedPlaysDrawer } from './components/SavedPlaysDrawer';
 import type { Lottery, LatestGroupedResult } from './types';
 import { api } from './services/api';
 
@@ -14,6 +15,7 @@ export function App() {
   const [results, setResults] = useState<LatestGroupedResult[]>([]);
   const [selectedLottery, setSelectedLottery] = useState<Lottery | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSavedDrawerOpen, setIsSavedDrawerOpen] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -57,6 +59,7 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onRefreshData={fetchData}
+        onOpenSavedPlays={() => setIsSavedDrawerOpen(true)}
       />
 
       {/* Main Body */}
@@ -88,6 +91,13 @@ export function App() {
 
         {activeTab === 'calculator' && <Calculator lotteries={lotteries} />}
       </main>
+
+      {/* Drawer de Mis Jugadas Guardadas */}
+      <SavedPlaysDrawer
+        isOpen={isSavedDrawerOpen}
+        onClose={() => setIsSavedDrawerOpen(false)}
+        latestResults={results}
+      />
 
       {/* Legal Footer */}
       <LegalFooter />

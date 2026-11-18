@@ -23,6 +23,7 @@ import {
   Sparkles,
   Info,
 } from 'lucide-react';
+import { LotteryHistoryCard } from './LotteryHistoryCard';
 
 interface StatsAnalyzerProps {
   lotteries: Lottery[];
@@ -442,6 +443,9 @@ export const StatsAnalyzer: React.FC<StatsAnalyzerProps> = ({
           )}
         </div>
       )}
+
+      {/* Historial de Sorteos Anteriores (Conectado al Sorteo Seleccionado) */}
+      <LotteryHistoryCard lottery={selectedLottery} />
     </div>
   );
 };

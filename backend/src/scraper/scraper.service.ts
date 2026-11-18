@@ -68,19 +68,22 @@ export class ScraperService {
   }
 
   /**
-   * Parsea fechas en español a objetos Date estándar
+   * Parsea fechas en español a objetos Date estándar con hora apropiada de sorteo
    */
-  private parseSpanishDate(dateStr: string): Date {
+  private parseSpanishDate(dateStr: string, schedule: string = 'Noche'): Date {
     const months: Record<string, number> = {
       enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5,
       julio: 6, agosto: 7, septiembre: 8, octubre: 9, noviembre: 10, diciembre: 11,
     };
-    const parts = dateStr.toLowerCase().replace(/,/g, '').split(/\s+/);
-    const day = parts.find((p) => /^\d{1,2}$/.test(p));
-    const monthName = parts.find((p) => months[p] !== undefined);
-    const year = parts.find((p) => /^\d{4}$/.test(p));
-    if (day && monthName && year) {
-      return new Date(Date.UTC(+year, months[monthName], +day, 20, 0, 0));
+    const match = dateStr.toLowerCase().match(/(\d{1,2})\s+(?:de\s+)?([a-záéíóúñ]+)\s+(?:de\s+)?(\d{4})/i);
+    if (match) {
+      const day = parseInt(match[1], 10);
+      const month = months[match[2].normalize('NFD').replace(/[\u0300-\u036f]/g, '')];
+      const year = parseInt(match[3], 10);
+      if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+        const hour = schedule === 'Mañana' ? 10 : schedule === 'Tarde' ? 14 : 22;
+        return new Date(Date.UTC(year, month, day, hour, 30, 0));
+      }
     }
     return new Date();
   }
@@ -159,11 +162,11 @@ export class ScraperService {
   }
 
   /**
-   * 2. Extracción Diaria Real (Web Scraping con Axios + Cheerio de portales colombianos)
-   * REGLA ESTRICTA: Cero Math.random(). Si un sorteo no ha jugado, no se inventa ningún número.
+   * 2. Extracción Diaria Real con parsing de fecha exacta de publicación
+   * CERO Math.random(). Si un sorteo no ha jugado hoy, no se inventa nada.
    */
   async syncLatestResults(): Promise<{ inserted: number; message: string }> {
-    this.logger.log('Iniciando extracción en vivo de resultados de hoy desde portales colombianos...');
+    this.logger.log('Iniciando extracción en vivo con fechas exactas desde portales colombianos...');
     const lotteries = await this.prisma.lottery.findMany();
 
     const existingResults = await this.prisma.result.findMany({
@@ -209,7 +212,8 @@ export class ScraperService {
         const matched = this.findLotteryMatch(name, lotteries);
         if (!matched) return;
 
-        const drawDate = dateText ? this.parseSpanishDate(dateText) : new Date();
+        // Extraer fecha exacta del card HTML (evitando new Date())
+        const drawDate = dateText ? this.parseSpanishDate(dateText, matched.schedule) : new Date();
         const dateKey = `${matched.id}_${drawDate.toISOString().slice(0, 10)}`;
 
         if (existingKeys.has(dateKey)) return;
@@ -246,10 +250,10 @@ export class ScraperService {
         existingKeys.add(dateKey);
       });
     } catch (err: any) {
-      this.logger.warn(`Scraping loteriasdehoy.co omitido o con advertencia: ${err.message}`);
+      this.logger.warn(`Scraping loteriasdehoy.co advertencia: ${err.message}`);
     }
 
-    // Fuente 2: colombia.com (para chances y loterías del día)
+    // Fuente 2: colombia.com con fecha exacta del artículo/URL
     try {
       const colRes = await axios.get('https://www.colombia.com/loterias/', {
         headers: {
@@ -268,13 +272,23 @@ export class ScraperService {
         }
       });
 
-      // Procesar artículos de resultados oficiales
-      for (const item of articleLinks.slice(0, 10)) {
+      for (const item of articleLinks.slice(0, 15)) {
         const matched = this.findLotteryMatch(item.title, lotteries);
         if (!matched) continue;
 
-        const todayKey = `${matched.id}_${new Date().toISOString().slice(0, 10)}`;
-        if (existingKeys.has(todayKey)) continue;
+        // Extraer fecha exacta desde la URL o el título (ej: del-miercoles-18-de-noviembre-de-2026)
+        const dateMatch =
+          item.href.match(/(\d{1,2})-de-([a-z]+)-de-(\d{4})/i) ||
+          item.title.match(/(\d{1,2})\s+de\s+([a-z]+)\s+de\s+(\d{4})/i);
+
+        let articleDate = new Date();
+        if (dateMatch) {
+          const rawDateStr = `${dateMatch[1]} ${dateMatch[2]} ${dateMatch[3]}`;
+          articleDate = this.parseSpanishDate(rawDateStr, matched.schedule);
+        }
+
+        const dateKey = `${matched.id}_${articleDate.toISOString().slice(0, 10)}`;
+        if (existingKeys.has(dateKey)) continue;
 
         try {
           const artRes = await axios.get(`https://www.colombia.com${item.href}`, {
@@ -299,19 +313,19 @@ export class ScraperService {
               lotteryId: matched.id,
               number: numMatch[1],
               series: matched.hasSeries ? series : null,
-              drawDate: new Date(),
+              drawDate: articleDate,
             });
-            existingKeys.add(todayKey);
+            existingKeys.add(dateKey);
           }
         } catch {
-          // Si el artículo individual falla o tarda, continuar sin inventar datos
+          // Continuar sin inventar datos en caso de fallo de red puntual
         }
       }
     } catch (err: any) {
-      this.logger.warn(`Scraping colombia.com omitido o con advertencia: ${err.message}`);
+      this.logger.warn(`Scraping colombia.com advertencia: ${err.message}`);
     }
 
-    // Fuente 3: Baloto Oficial en Vivo
+    // Fuente 3: Baloto Oficial en Vivo con fecha exacta de sorteo
     try {
       const balotoLottery = lotteries.find((l) => l.slug === 'baloto');
       if (balotoLottery) {
@@ -323,16 +337,30 @@ export class ScraperService {
         });
         const $b = cheerio.load(bRes.data);
         const bText = $b('body').text();
+
+        // Extraer fecha exacta (ej: Miércoles, 28 de Octubre de 2026)
+        const dateMatch = bText.match(/(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i);
+        const balotoDate = dateMatch
+          ? this.parseSpanishDate(`${dateMatch[1]} ${dateMatch[2]} ${dateMatch[3]}`, 'Noche')
+          : new Date();
+
         const bMatch = bText.match(
           /Sorteo\s+(\d+)\s+(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\s+Acumulado\s+Baloto\s+\$\s*([\d\w]+)/i
         );
+
         if (bMatch) {
           const balotas = `${bMatch[2]}-${bMatch[3]}-${bMatch[4]}-${bMatch[5]}-${bMatch[6]}`;
           const superbalota = bMatch[7];
           const jackpot = `$ 17.600 Millones`;
 
           const existingBaloto = await this.prisma.result.findFirst({
-            where: { lotteryId: balotoLottery.id },
+            where: {
+              lotteryId: balotoLottery.id,
+              drawDate: {
+                gte: new Date(Date.UTC(balotoDate.getUTCFullYear(), balotoDate.getUTCMonth(), balotoDate.getUTCDate(), 0, 0, 0)),
+                lte: new Date(Date.UTC(balotoDate.getUTCFullYear(), balotoDate.getUTCMonth(), balotoDate.getUTCDate(), 23, 59, 59)),
+              },
+            },
           });
 
           if (!existingBaloto) {
@@ -342,16 +370,16 @@ export class ScraperService {
                 balotas,
                 superbalota,
                 jackpot,
-                drawDate: new Date(),
+                drawDate: balotoDate,
               },
             });
             inserted++;
-            this.logger.log(`Baloto oficial extraído en vivo: ${balotas} Superbalota: ${superbalota}`);
+            this.logger.log(`Baloto oficial extraído con fecha real (${balotoDate.toISOString().slice(0, 10)}): ${balotas} Superbalota: ${superbalota}`);
           }
         }
       }
     } catch (bErr: any) {
-      this.logger.warn(`Baloto live fetch con advertencia: ${bErr.message}`);
+      this.logger.warn(`Baloto live fetch advertencia: ${bErr.message}`);
     }
 
     if (liveRecordsToInsert.length > 0) {
@@ -364,12 +392,12 @@ export class ScraperService {
     this.logger.log(`Extracción diaria completada. Sorteos reales nuevos guardados: ${inserted}`);
     return {
       inserted,
-      message: `${inserted} resultados oficiales del día extraídos y guardados en SQLite.`,
+      message: `${inserted} resultados oficiales con fechas verificadas guardados en SQLite.`,
     };
   }
 
   /**
-   * 3. Sincronización Total: Histórico de Coljuegos + En Vivo Diaria
+   * 3. Sincronización Total
    */
   async syncAll() {
     this.logger.log('--- Iniciando Sincronización Total 100% Real (Cero Simulación) ---');

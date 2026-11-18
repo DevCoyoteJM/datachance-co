@@ -32,4 +32,9 @@ export class AnalyticsController {
   async getDailyInsights(@Param('slug') slug: string) {
     return this.analyticsService.getDailyInsights(slug);
   }
+
+  @Get('check-number/:number')
+  async checkNumber(@Param('number') number: string) {
+    return this.analyticsService.checkNumberGlobal(number);
+  }
 }

@@ -590,4 +590,89 @@ export class AnalyticsService {
       },
     };
   }
+
+  /**
+   * Buscador Global "Verifica tu Número" (Historial 360° en toda Colombia)
+   */
+  async checkNumberGlobal(rawNumber: string) {
+    const cleanNumber = (rawNumber || '').replace(/[^\d]/g, '').slice(-4).padStart(4, '0');
+    const pata = cleanNumber.slice(-2);
+    const una = cleanNumber.slice(-1);
+
+    // 1. Todas las apariciones exactas de 4 cifras
+    const occurrences = await this.prisma.result.findMany({
+      where: {
+        number: cleanNumber,
+      },
+      include: {
+        lottery: true,
+      },
+      orderBy: {
+        drawDate: 'desc',
+      },
+    });
+
+    // 2. Conteo de apariciones de la Pata (últimas 2 cifras)
+    const pataCount = await this.prisma.result.count({
+      where: {
+        number: {
+          endsWith: pata,
+        },
+      },
+    });
+
+    // 3. Conteo de apariciones de la Uña (última cifra)
+    const unaCount = await this.prisma.result.count({
+      where: {
+        number: {
+          endsWith: una,
+        },
+      },
+    });
+
+    // Agrupar por lotería/chance
+    const lotteryMap = new Map<number, { lotteryName: string; category: string; count: number; lastDate: Date }>();
+    for (const occ of occurrences) {
+      const existing = lotteryMap.get(occ.lotteryId);
+      if (!existing) {
+        lotteryMap.set(occ.lotteryId, {
+          lotteryName: occ.lottery.name,
+          category: occ.lottery.category,
+          count: 1,
+          lastDate: occ.drawDate,
+        });
+      } else {
+        existing.count++;
+        if (new Date(occ.drawDate) > new Date(existing.lastDate)) {
+          existing.lastDate = occ.drawDate;
+        }
+      }
+    }
+
+    const now = new Date();
+    const lastAppearance = occurrences.length > 0 ? occurrences[0].drawDate : null;
+    const daysAgo = lastAppearance
+      ? Math.max(0, Math.floor((now.getTime() - new Date(lastAppearance).getTime()) / (1000 * 60 * 60 * 24)))
+      : null;
+
+    return {
+      number: cleanNumber,
+      totalOccurrences: occurrences.length,
+      lastAppearance,
+      daysAgo,
+      pata,
+      pataOccurrences: pataCount,
+      una,
+      unaOccurrences: unaCount,
+      byLottery: Array.from(lotteryMap.values()).sort((a, b) => b.count - a.count),
+      recentOccurrences: occurrences.slice(0, 20).map((o) => ({
+        id: o.id,
+        lotteryName: o.lottery.name,
+        category: o.lottery.category,
+        drawDate: o.drawDate,
+        series: o.series,
+        zodiacSign: o.zodiacSign,
+      })),
+    };
+  }
 }

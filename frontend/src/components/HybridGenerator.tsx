@@ -15,7 +15,9 @@ import {
   TrendingUp,
   ShieldCheck,
   Award,
+  Bookmark,
 } from 'lucide-react';
+import { savedPlaysService } from '../services/savedPlays';
 
 interface HybridGeneratorProps {
   lotteries: Lottery[];
@@ -31,6 +33,26 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
   const [activeMode, setActiveMode] = useState<'statistical' | 'pyramid' | 'hybrid'>('hybrid');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [savedPlayId, setSavedPlayId] = useState<string | null>(null);
+
+  const handleSavePlay = (
+    number: string,
+    type: '4_CIFRAS' | 'PATA' | 'BALOTO',
+    source: 'ESTADISTICO' | 'PIRAMIDE' | 'HIBRIDO',
+    id: string,
+    superbalota?: string,
+  ) => {
+    savedPlaysService.savePlay({
+      number,
+      type,
+      source,
+      lotteryName: selectedLottery?.name,
+      superbalota,
+      notes: `Generado en ${selectedLottery?.name || 'Sorteo'} (${source})`,
+    });
+    setSavedPlayId(id);
+    setTimeout(() => setSavedPlayId(null), 2500);
+  };
 
   // Data states
   const [pyramidData, setPyramidData] = useState<PyramidData | null>(null);
@@ -290,7 +312,19 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
                       </p>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-white/5">
+                    <div className="mt-6 pt-4 border-t border-white/5 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleSavePlay(combo.combination, '4_CIFRAS', 'HIBRIDO', `save-combo-${idx}`)
+                        }
+                        className="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-gray-300 hover:text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                        title="Guardar jugada en mis favoritos"
+                      >
+                        <Bookmark className={`w-3.5 h-3.5 ${savedPlayId === `save-combo-${idx}` ? 'text-neon-emerald fill-neon-emerald' : 'text-gray-400'}`} />
+                        <span>{savedPlayId === `save-combo-${idx}` ? '¡Guardada!' : 'Guardar'}</span>
+                      </button>
+
                       <button
                         onClick={() =>
                           copyToClipboard(
@@ -300,15 +334,15 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
                             `combo-${idx}`
                           )
                         }
-                        className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
+                        className="flex-1 py-2.5 px-3 rounded-xl bg-neon-emerald/20 hover:bg-neon-emerald/30 border border-emerald-500/30 text-xs font-bold text-neon-emerald flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                       >
                         {copiedId === `combo-${idx}` ? (
                           <>
-                            <Check className="w-4 h-4 text-neon-emerald" /> ¡Copiado!
+                            <Check className="w-3.5 h-3.5 text-neon-emerald" /> ¡Copiado!
                           </>
                         ) : (
                           <>
-                            <Copy className="w-4 h-4 text-gray-400" /> Copiar Jugada
+                            <Copy className="w-3.5 h-3.5" /> Copiar
                           </>
                         )}
                       </button>
@@ -465,7 +499,24 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
             <p>{statisticalData.explanation}</p>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                handleSavePlay(
+                  isBaloto ? statisticalData.balotas : statisticalData.number,
+                  isBaloto ? 'BALOTO' : '4_CIFRAS',
+                  'ESTADISTICO',
+                  'stat-save',
+                  isBaloto ? statisticalData.superbalota : undefined
+                )
+              }
+              className="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm flex items-center gap-2 transition-all cursor-pointer"
+            >
+              <Bookmark className={`w-4 h-4 ${savedPlayId === 'stat-save' ? 'text-neon-emerald fill-neon-emerald' : 'text-gray-400'}`} />
+              <span>{savedPlayId === 'stat-save' ? '¡Guardada!' : 'Guardar Jugada'}</span>
+            </button>
+
             <button
               onClick={() =>
                 copyToClipboard(

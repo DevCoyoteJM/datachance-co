@@ -6,6 +6,8 @@ import type {
   HybridResponse,
   CalculationResult,
   DailyInsights,
+  LotteryHistoryResponse,
+  CheckNumberResponse,
 } from '../types';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -29,6 +31,35 @@ export const api = {
   async getLotteryStats(lotteryId: number): Promise<LotteryStatsResponse> {
     const res = await fetch(`${API_BASE}/analytics/lottery/${lotteryId}`);
     if (!res.ok) throw new Error('Error al cargar estadísticas');
+    return res.json();
+  },
+
+  async getLotteryHistory(
+    slug: string,
+    options?: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      startDate?: string;
+      endDate?: string;
+    },
+  ): Promise<LotteryHistoryResponse> {
+    const params = new URLSearchParams();
+    if (options?.page) params.append('page', options.page.toString());
+    if (options?.limit) params.append('limit', options.limit.toString());
+    if (options?.search) params.append('search', options.search.trim());
+    if (options?.startDate) params.append('startDate', options.startDate);
+    if (options?.endDate) params.append('endDate', options.endDate);
+
+    const res = await fetch(`${API_BASE}/lotteries/${slug}/history?${params.toString()}`);
+    if (!res.ok) throw new Error(`Error al cargar historial para ${slug}`);
+    return res.json();
+  },
+
+  async checkNumber(number: string): Promise<CheckNumberResponse> {
+    const cleanNumber = number.replace(/[^\d]/g, '');
+    const res = await fetch(`${API_BASE}/analytics/check-number/${cleanNumber}`);
+    if (!res.ok) throw new Error(`Error al verificar número ${number}`);
     return res.json();
   },
 

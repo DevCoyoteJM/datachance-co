@@ -15,7 +15,9 @@ import {
   TrendingDown,
   ShieldAlert,
   Zap,
+  Bookmark,
 } from 'lucide-react';
+import { savedPlaysService } from '../services/savedPlays';
 
 interface PopularDraw {
   slug: string;
@@ -41,6 +43,20 @@ export const DailyInsightsCard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
+  const [savedPlaySuccess, setSavedPlaySuccess] = useState<boolean>(false);
+
+  const handleSavePlay = () => {
+    if (!insights) return;
+    savedPlaysService.savePlay({
+      number: insights.hybridRecommendation.primaryCombination,
+      type: '4_CIFRAS',
+      source: 'DATOS_DEL_DIA',
+      lotteryName: insights.lottery.name,
+      notes: `Jugada Híbrida del Día para ${insights.lottery.name} (${insights.hybridRecommendation.confidence}% confianza)`,
+    });
+    setSavedPlaySuccess(true);
+    setTimeout(() => setSavedPlaySuccess(false), 2500);
+  };
 
   useEffect(() => {
     loadInsights(selectedSlug);
@@ -370,8 +386,18 @@ export const DailyInsightsCard: React.FC = () => {
               </p>
             </div>
 
-            {/* Actions: Copiar y Compartir */}
+            {/* Actions: Copiar y Guardar */}
             <div className="flex items-center gap-2 self-end md:self-center shrink-0">
+              <button
+                type="button"
+                onClick={handleSavePlay}
+                className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer"
+                title="Guardar combinación en mis favoritos locales"
+              >
+                <Bookmark className={`w-4 h-4 ${savedPlaySuccess ? 'text-neon-emerald fill-neon-emerald' : 'text-gray-400'}`} />
+                <span>{savedPlaySuccess ? '¡Guardada!' : 'Guardar Jugada'}</span>
+              </button>
+
               <button
                 onClick={() =>
                   handleCopy(insights.hybridRecommendation.primaryCombination, 'daily-primary')

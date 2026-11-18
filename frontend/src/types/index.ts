@@ -99,72 +99,28 @@ export interface PyramidData {
   };
 }
 
-export interface HybridCombination {
-  combination: string;
-  type: string;
-  confidence: number;
-  explanation: string;
-}
-
 export interface HybridResponse {
-  mode: 'HYBRID_CHANCE' | 'HYBRID_BALOTO';
   lottery: Lottery;
-  pyramid: PyramidData;
-  zodiacPrediction?: string | null;
-  hybridCombinations?: HybridCombination[];
-  prediction?: {
-    balotas: string;
-    superbalota: string;
-    confidence: number;
-    explanation: string;
+  suggested4Digit: string;
+  pata: string;
+  una: string;
+  pyramidSource: PyramidData;
+  hotDigitsApplied: string[];
+  rationale: string;
+  confidenceScore: number;
+  balotoSuggestion?: {
+    balls: number[];
+    superbalota: number;
   };
-}
-
-export interface MathematicalAnalysis {
-  probabilityRatio: string;
-  probabilityFloat: number;
-  probabilityPercentage: string;
-  rtpPercent: number;
-  evPerPeso: number;
-  houseEdgePercent: number;
-  advantageParty: 'CASA' | 'JUGADOR';
-  breakevenMultiplierGross: number;
-  breakevenMultiplierNet: number;
-  breakevenDescription: string;
 }
 
 export interface CalculationResult {
   modality: string;
-  modalityName: string;
-  gameType: 'CHANCE_TRADICIONAL' | 'SUPER_ASTRO' | 'BALOTO';
-  gameName: string;
   betAmount: number;
-  multiplier: number;
-  effectiveMultiplier: number;
   grossPrize: number;
   withholdingTax: number;
   netPrize: number;
-  formattedBet: string;
-  formattedGross: string;
-  formattedTax: string;
-  formattedNet: string;
-  notes: string;
-  allSigns?: boolean;
-  uvtValue: number;
-  uvtThresholdCop: number;
-  isTaxExempt: boolean;
-  mathAnalysis: MathematicalAnalysis;
-}
-
-export interface DelayedUnaItem {
-  digit: number;
-  drawsAgo: number;
-  status: 'CRITICAL' | 'HIGH' | 'MEDIUM';
-}
-
-export interface DelayedPataItem {
-  termination: string;
-  drawsAgo: number;
+  description: string;
 }
 
 export interface DailyInsights {
@@ -183,15 +139,15 @@ export interface DailyInsights {
     invertedNumber: string;
     mirrorNumber: string;
   };
-  counterpartResult: {
+  counterpartResult?: {
     name: string;
     slug: string;
     number: string;
     drawDate: string;
   } | null;
   delayedStats: {
-    una: DelayedUnaItem[];
-    pata: DelayedPataItem[];
+    una: { digit: number; drawsAgo: number }[];
+    pata: { termination: string; drawsAgo: number }[];
     totalDrawsAnalyzed: number;
   };
   pyramidKey: {
@@ -207,4 +163,62 @@ export interface DailyInsights {
     confidence: number;
     rationale: string;
   };
+}
+
+// Historial de Sorteos Anteriores
+export interface HistoryResultItem extends LotteryResult {
+  daysAgo: number;
+}
+
+export interface LotteryHistoryResponse {
+  lottery: Lottery;
+  results: HistoryResultItem[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+// Buscador Global "Verifica tu Número"
+export interface NumberOccurrence {
+  id: number;
+  lotteryName: string;
+  category: string;
+  drawDate: string;
+  series?: string | null;
+  zodiacSign?: string | null;
+}
+
+export interface LotteryAppearanceGroup {
+  lotteryName: string;
+  category: string;
+  count: number;
+  lastDate: string;
+}
+
+export interface CheckNumberResponse {
+  number: string;
+  totalOccurrences: number;
+  lastAppearance: string | null;
+  daysAgo: number | null;
+  pata: string;
+  pataOccurrences: number;
+  una: string;
+  unaOccurrences: number;
+  byLottery: LotteryAppearanceGroup[];
+  recentOccurrences: NumberOccurrence[];
+}
+
+// Mis Jugadas Guardadas (localStorage)
+export interface SavedPlay {
+  id: string;
+  number: string;
+  type: '4_CIFRAS' | 'PATA' | 'BALOTO';
+  source: 'ESTADISTICO' | 'PIRAMIDE' | 'HIBRIDO' | 'DATOS_DEL_DIA' | 'MANUAL';
+  lotteryName?: string;
+  superbalota?: string;
+  savedAt: string;
+  notes?: string;
 }
