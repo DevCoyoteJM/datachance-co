@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { CalculatorService, GameType } from './calculator.service';
 
-@Controller('api/calculator')
+@Controller('calculator')
 export class CalculatorController {
   constructor(private readonly calculatorService: CalculatorService) {}
 

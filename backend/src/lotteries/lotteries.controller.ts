@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LotteriesService } from './lotteries.service';
 
-@Controller('api')
+@Controller()
 export class LotteriesController {
   constructor(private readonly lotteriesService: LotteriesService) {}
 

@@ -6,6 +6,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
 
+  // Prefijo global para todas las rutas de la API (/api/...)
+  app.setGlobalPrefix('api');
+
   // Habilitar CORS para permitir peticiones desde el frontend (Vite en 5173 / localhost)
   app.enableCors({
     origin: true,
