@@ -113,7 +113,7 @@ export const api = {
   },
 
   async triggerSync(): Promise<{ status: string; message: string; newResultsCount: number }> {
-    const res = await fetch(`${API_BASE}/scraper/sync`, { method: 'POST' });
+    const res = await fetch(`${API_BASE}/scraper/sync-daily`, { method: 'POST' });
     if (!res.ok) throw new Error('Error al sincronizar resultados');
     return res.json();
   },

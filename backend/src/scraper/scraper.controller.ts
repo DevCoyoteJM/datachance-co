@@ -5,6 +5,8 @@ import { ScraperService } from './scraper.service';
 export class ScraperController {
   constructor(private readonly scraperService: ScraperService) {}
 
+  @Get('sync-daily')
+  @Post('sync-daily')
   @Get('sync')
   @Post('sync')
   async triggerManualSync() {

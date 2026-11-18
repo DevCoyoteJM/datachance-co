@@ -2,7 +2,7 @@
   "$schema": "https://vercel.sh",
   "crons": [
     {
-      "path": "/api/scraper/sync-all",
+      "path": "/api/scraper/sync-daily",
       "schedule": "0 4 * * *"
     }
   ],
