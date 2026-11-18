@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '../prisma/prisma.service';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
@@ -9,23 +8,6 @@ export class ScraperService {
   private readonly logger = new Logger(ScraperService.name);
 
   constructor(private prisma: PrismaService) {}
-
-  /**
-   * Cron Job programado en zona horaria America/Bogota
-   * Se ejecuta automáticamente cada 15 minutos en horario de sorteos en Colombia (10:00 a 23:00)
-   */
-  @Cron('0 */15 10-23 * * *', {
-    name: 'colombia-results-sync',
-    timeZone: 'America/Bogota',
-  })
-  async handleCron() {
-    this.logger.log('Iniciando sincronización programada de resultados oficiales...');
-    try {
-      await this.syncLatestResults();
-    } catch (err: any) {
-      this.logger.error(`Error en sincronización programada: ${err.message}`);
-    }
-  }
 
   /**
    * Normalizador fonético y léxico para cruzar nombres de loterías y chances
