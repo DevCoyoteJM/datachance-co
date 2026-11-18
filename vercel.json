@@ -1,5 +1,11 @@
 {
   "$schema": "https://vercel.sh",
+  "crons": [
+    {
+      "path": "/api/scraper/sync-all",
+      "schedule": "0 4 * * *"
+    }
+  ],
   "services": {
     "backend": {
       "root": "backend",
