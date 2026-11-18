@@ -2,12 +2,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const ZODIAC_SIGNS = [
-  'Aries', 'Tauro', 'Géminis', 'Cáncer',
-  'Leo', 'Virgo', 'Libra', 'Escorpio',
-  'Sagitario', 'Capricornio', 'Acuario', 'Piscis'
-];
-
 interface LotterySeed {
   name: string;
   slug: string;
@@ -20,7 +14,7 @@ interface LotterySeed {
 }
 
 const LOTTERIES_DATA: LotterySeed[] = [
-  // 15 Loterías Tradicionales
+  // 15 Loterías Tradicionales de Colombia
   { name: 'Lotería de Cundinamarca', slug: 'loteria-cundinamarca', category: 'LOTERIA', schedule: 'Noche', playDays: 'Lunes', hasSeries: true },
   { name: 'Lotería del Tolima', slug: 'loteria-tolima', category: 'LOTERIA', schedule: 'Noche', playDays: 'Lunes', hasSeries: true },
   { name: 'Lotería de la Cruz Roja', slug: 'loteria-cruz-roja', category: 'LOTERIA', schedule: 'Noche', playDays: 'Martes', hasSeries: true },
@@ -81,37 +75,16 @@ const LOTTERIES_DATA: LotterySeed[] = [
   { name: 'Baloto Revancha', slug: 'baloto-revancha', category: 'BALOTO', schedule: 'Noche', playDays: 'Miércoles y Sábados', isBaloto: true },
 ];
 
-function getRandomBalotas(): { balotas: string; superbalota: string } {
-  const numbers = new Set<number>();
-  while (numbers.size < 5) {
-    numbers.add(Math.floor(Math.random() * 43) + 1);
-  }
-  const sorted = Array.from(numbers).sort((a, b) => a - b);
-  const balotas = sorted.map(n => n.toString().padStart(2, '0')).join('-');
-  const superbalota = (Math.floor(Math.random() * 16) + 1).toString().padStart(2, '0');
-  return { balotas, superbalota };
-}
-
-function getRandom4Digit(): string {
-  return Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-}
-
-function getRandomSeries(): string {
-  return Math.floor(Math.random() * 500).toString().padStart(3, '0');
-}
-
-function getRandomZodiac(): string {
-  return ZODIAC_SIGNS[Math.floor(Math.random() * ZODIAC_SIGNS.length)];
-}
-
 async function main() {
-  console.log('--- Iniciando Seed de DataChance CO ---');
+  console.log('--- Iniciando Seed Maestro de DataChance CO (Catálogo 100% Real, Cero Ficticios) ---');
 
-  // Limpiar datos anteriores
-  await prisma.result.deleteMany();
+  // 1. Limpieza total de resultados simulados anteriores
+  const deletedResults = await prisma.result.deleteMany();
+  console.log(`Tabla Result limpiada: ${deletedResults.count} registros eliminados.`);
+
+  // 2. Limpieza y carga del catálogo maestro de loterías
   await prisma.lottery.deleteMany();
-
-  const now = new Date();
+  console.log('Tabla Lottery limpiada.');
 
   for (const item of LOTTERIES_DATA) {
     const lottery = await prisma.lottery.create({
@@ -127,55 +100,16 @@ async function main() {
       },
     });
 
-    console.log(`Creada lotería: ${lottery.name} (${lottery.category})`);
-
-    // Generar al menos 20 resultados históricos realistas por cada sorteo
-    const resultsCount = 20;
-    const resultsData = [];
-
-    for (let i = 0; i < resultsCount; i++) {
-      // Fechas retroactivas: 1 sorteo por día o intervalo
-      const drawDate = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-      drawDate.setHours(item.schedule === 'Mañana' ? 10 : item.schedule === 'Tarde' ? 14 : 22, 30, 0, 0);
-
-      if (item.isBaloto) {
-        const { balotas, superbalota } = getRandomBalotas();
-        const baseJackpot = item.slug === 'baloto' ? 18500 : 7200;
-        const jackpot = `$ ${(baseJackpot + (resultsCount - i) * 500).toLocaleString('es-CO')} Millones`;
-
-        resultsData.push({
-          lotteryId: lottery.id,
-          balotas,
-          superbalota,
-          jackpot,
-          drawDate,
-        });
-      } else {
-        const number = getRandom4Digit();
-        const series = item.hasSeries ? getRandomSeries() : null;
-        const zodiacSign = item.hasZodiac ? getRandomZodiac() : null;
-
-        resultsData.push({
-          lotteryId: lottery.id,
-          number,
-          series,
-          zodiacSign,
-          drawDate,
-        });
-      }
-    }
-
-    await prisma.result.createMany({
-      data: resultsData,
-    });
+    console.log(`Lotería registrada: ${lottery.name} [${lottery.category}] (ID: ${lottery.id})`);
   }
 
-  console.log(' Seed completado con éxito con catálogo completo y resultados históricos.');
+  console.log(`\n Catálogo maestro completado con éxito: ${LOTTERIES_DATA.length} juegos registrados.`);
+  console.log(' Tabla Result se mantiene en 0 registros a la espera de sincronización con datos reales.');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Error en seed:', e);
     process.exit(1);
   })
   .finally(async () => {

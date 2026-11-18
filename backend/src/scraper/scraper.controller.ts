@@ -9,4 +9,9 @@ export class ScraperController {
   async triggerManualSync() {
     return this.scraperService.syncLatestResults();
   }
+
+  @Post('sync-all')
+  async triggerSyncAll() {
+    return this.scraperService.syncAll();
+  }
 }
