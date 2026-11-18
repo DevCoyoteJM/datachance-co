@@ -2,12 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger, INestApplication } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import express, { Express } from 'express';
 
-const server: Express = express();
+const express = require('express');
+const server = express();
 let nestApp: INestApplication | null = null;
 
-export async function createNestServer(expressInstance: Express): Promise<INestApplication> {
+export async function createNestServer(expressInstance: any): Promise<INestApplication> {
   if (nestApp) return nestApp;
 
   const adapter = new ExpressAdapter(expressInstance);
@@ -45,6 +45,8 @@ export default async function handler(req: any, res: any) {
   }
   return server(req, res);
 }
+
+export { handler };
 
 // Para ejecución local fuera de Vercel
 if (!process.env.VERCEL) {
