@@ -45,25 +45,16 @@ function ensureNest(): Promise<INestApplication> {
   return nestPromise;
 }
 
-// Iniciar NestJS inmediatamente en segundo plano
-ensureNest().catch((err) => {
-  console.error('Error durante la inicialización de NestJS:', err);
-});
-
-// Servidor HTTP local (en desarrollo / local no-Vercel)
-if (!process.env.VERCEL) {
-  const server = http.createServer(expressApp);
-  const port = Number(process.env.PORT) || 3001;
-
-  server.listen(port, '0.0.0.0', () => {
-    const logger = new Logger('Bootstrap');
-    logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
-    logger.log(`API disponible con prefijo /api`);
-  });
-}
-
 // Handler serverless para Vercel Functions que espera el fin de la respuesta
 const handler = (req: any, res: any) => {
+  // Endpoint de diagnóstico rápido sin dependencias
+  if (req.url && (req.url.endsWith('/ping') || req.url.includes('ping'))) {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('PONG');
+    return Promise.resolve();
+  }
+
   return new Promise((resolve, reject) => {
     res.on('finish', resolve);
     res.on('close', resolve);
@@ -79,7 +70,7 @@ const handler = (req: any, res: any) => {
       .catch((err: any) => {
         console.error('Error inicializando NestJS en handler:', err);
         if (!res.headersSent) {
-          res.statusCode = 500;
+          res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
           res.end(
             JSON.stringify({

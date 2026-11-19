@@ -5953,7 +5953,7 @@ var require_is_promise_util = __commonJS({
 var require_utils4 = __commonJS({
   "node_modules/class-validator/cjs/utils/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -5967,7 +5967,7 @@ var require_utils4 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_convert_to_array_util(), exports2);
@@ -22895,7 +22895,7 @@ var require_validator = __commonJS({
 var require_IsStrongPassword = __commonJS({
   "node_modules/class-validator/cjs/decorator/string/IsStrongPassword.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -22908,23 +22908,23 @@ var require_IsStrongPassword = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.IsStrongPassword = exports2.isStrongPassword = exports2.IS_STRONG_PASSWORD = void 0;
-    var validator = __importStar3(require_validator());
+    var validator = __importStar2(require_validator());
     var ValidateBy_1 = require_ValidateBy();
     exports2.IS_STRONG_PASSWORD = "isStrongPassword";
     function isStrongPassword(value, options) {
@@ -23530,7 +23530,7 @@ var require_IsInstance = __commonJS({
 var require_decorators2 = __commonJS({
   "node_modules/class-validator/cjs/decorator/decorators.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -23544,7 +23544,7 @@ var require_decorators2 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_Allow(), exports2);
@@ -23697,7 +23697,7 @@ var require_ValidationSchema = __commonJS({
 var require_cjs = __commonJS({
   "node_modules/class-validator/cjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -23711,7 +23711,7 @@ var require_cjs = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.registerSchema = exports2.validateSync = exports2.validateOrReject = exports2.validate = void 0;
@@ -23780,7 +23780,7 @@ var require_transformation_type_enum = __commonJS({
 var require_enums2 = __commonJS({
   "node_modules/class-transformer/cjs/enums/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -23790,7 +23790,7 @@ var require_enums2 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_transformation_type_enum(), exports2);
@@ -24049,7 +24049,7 @@ var require_is_promise_util2 = __commonJS({
 var require_utils5 = __commonJS({
   "node_modules/class-transformer/cjs/utils/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -24059,7 +24059,7 @@ var require_utils5 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_get_global_util2(), exports2);
@@ -24693,7 +24693,7 @@ var require_type_decorator = __commonJS({
 var require_decorators3 = __commonJS({
   "node_modules/class-transformer/cjs/decorators/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -24703,7 +24703,7 @@ var require_decorators3 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_exclude_decorator(), exports2);
@@ -24832,7 +24832,7 @@ var require_type_help_options_interface = __commonJS({
 var require_interfaces3 = __commonJS({
   "node_modules/class-transformer/cjs/interfaces/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -24842,7 +24842,7 @@ var require_interfaces3 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     __exportStar2(require_expose_options_interface(), exports2);
@@ -24866,7 +24866,7 @@ var require_interfaces3 = __commonJS({
 var require_cjs2 = __commonJS({
   "node_modules/class-transformer/cjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -24876,7 +24876,7 @@ var require_cjs2 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.deserializeArray = exports2.deserialize = exports2.serialize = exports2.classToClassFromExist = exports2.instanceToInstance = exports2.plainToClassFromExist = exports2.plainToInstance = exports2.plainToClass = exports2.classToPlainFromExist = exports2.instanceToPlain = exports2.classToPlain = exports2.ClassTransformer = void 0;
@@ -35458,7 +35458,7 @@ var require_types = __commonJS({
 var require_cjs3 = __commonJS({
   "node_modules/rxjs/dist/cjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -35468,7 +35468,7 @@ var require_cjs3 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.interval = exports2.iif = exports2.generate = exports2.fromEventPattern = exports2.fromEvent = exports2.from = exports2.forkJoin = exports2.empty = exports2.defer = exports2.connectable = exports2.concat = exports2.combineLatest = exports2.bindNodeCallback = exports2.bindCallback = exports2.UnsubscriptionError = exports2.TimeoutError = exports2.SequenceError = exports2.ObjectUnsubscribedError = exports2.NotFoundError = exports2.EmptyError = exports2.ArgumentOutOfRangeError = exports2.firstValueFrom = exports2.lastValueFrom = exports2.isObservable = exports2.identity = exports2.noop = exports2.pipe = exports2.NotificationKind = exports2.Notification = exports2.Subscriber = exports2.Subscription = exports2.Scheduler = exports2.VirtualAction = exports2.VirtualTimeScheduler = exports2.animationFrameScheduler = exports2.animationFrame = exports2.queueScheduler = exports2.queue = exports2.asyncScheduler = exports2.async = exports2.asapScheduler = exports2.asap = exports2.AsyncSubject = exports2.ReplaySubject = exports2.BehaviorSubject = exports2.Subject = exports2.animationFrames = exports2.observable = exports2.ConnectableObservable = exports2.Observable = void 0;
@@ -62139,10 +62139,10 @@ var require_layer = __commonJS({
 var require_methods = __commonJS({
   "node_modules/methods/index.js"(exports2, module2) {
     "use strict";
-    var http2 = require("http");
+    var http = require("http");
     module2.exports = getCurrentNodeMethods() || getBasicNodeMethods();
     function getCurrentNodeMethods() {
-      return http2.METHODS && http2.METHODS.map(function lowerCaseMethod(method) {
+      return http.METHODS && http.METHODS.map(function lowerCaseMethod(method) {
         return method.toLowerCase();
       });
     }
@@ -64947,7 +64947,7 @@ var require_application = __commonJS({
     var query = require_query();
     var debug = require_src()("express:application");
     var View = require_view();
-    var http2 = require("http");
+    var http = require("http");
     var compileETag = require_utils10().compileETag;
     var compileQueryParser = require_utils10().compileQueryParser;
     var compileTrust = require_utils10().compileTrust;
@@ -65196,7 +65196,7 @@ var require_application = __commonJS({
       tryRender(view, renderOptions, done);
     };
     app.listen = function listen() {
-      var server = http2.createServer(this);
+      var server = http.createServer(this);
       return server.listen.apply(server, arguments);
     };
     function logerror(err) {
@@ -65798,12 +65798,12 @@ var require_request = __commonJS({
     var deprecate = require_depd()("express");
     var isIP = require("net").isIP;
     var typeis = require_type_is();
-    var http2 = require("http");
+    var http = require("http");
     var fresh = require_fresh();
     var parseRange = require_range_parser();
     var parse = require_parseurl();
     var proxyaddr = require_proxy_addr();
-    var req = Object.create(http2.IncomingMessage.prototype);
+    var req = Object.create(http.IncomingMessage.prototype);
     module2.exports = req;
     req.get = req.header = function header(name) {
       if (!name) {
@@ -66151,7 +66151,7 @@ var require_response = __commonJS({
     var deprecate = require_depd()("express");
     var encodeUrl = require_encodeurl();
     var escapeHtml = require_escape_html();
-    var http2 = require("http");
+    var http = require("http");
     var isAbsolute = require_utils10().isAbsolute;
     var onFinished = require_on_finished();
     var path = require("path");
@@ -66167,7 +66167,7 @@ var require_response = __commonJS({
     var mime = send.mime;
     var resolve = path.resolve;
     var vary = require_vary();
-    var res = Object.create(http2.ServerResponse.prototype);
+    var res = Object.create(http.ServerResponse.prototype);
     module2.exports = res;
     var charsetRegExp = /;\s*charset\s*=/;
     res.status = function status(code) {
@@ -66904,7 +66904,7 @@ var require_express_adapter = __commonJS({
     var bodyparser = require_body_parser();
     var cors = require_lib4();
     var express2 = require_express2();
-    var http2 = require("http");
+    var http = require("http");
     var https = require("https");
     var stream_1 = require("stream");
     var get_body_parser_options_util_1 = require_get_body_parser_options_util();
@@ -67032,7 +67032,7 @@ var require_express_adapter = __commonJS({
         if (isHttpsEnabled) {
           this.httpServer = https.createServer(options.httpsOptions, this.getInstance());
         } else {
-          this.httpServer = http2.createServer(this.getInstance());
+          this.httpServer = http.createServer(this.getInstance());
         }
         if (options?.forceCloseConnections) {
           this.trackOpenConnections();
@@ -77818,7 +77818,7 @@ var require_form_data = __commonJS({
     var CombinedStream = require_combined_stream();
     var util2 = require("util");
     var path = require("path");
-    var http2 = require("http");
+    var http = require("http");
     var https = require("https");
     var parseUrl = require("url").parse;
     var fs = require("fs");
@@ -78093,7 +78093,7 @@ var require_form_data = __commonJS({
       if (options.protocol === "https:") {
         request = https.request(options);
       } else {
-        request = http2.request(options);
+        request = http.request(options);
       }
       this.getLength(function(err, length) {
         if (err && err !== "Unknown stream") {
@@ -80019,7 +80019,7 @@ var require_follow_redirects = __commonJS({
   "node_modules/follow-redirects/index.js"(exports2, module2) {
     var url = require("url");
     var URL2 = url.URL;
-    var http2 = require("http");
+    var http = require("http");
     var https = require("https");
     var Writable = require("stream").Writable;
     var assert = require("assert");
@@ -80523,7 +80523,7 @@ var require_follow_redirects = __commonJS({
     function escapeRegex(regex) {
       return regex.replace(/[\^$\\.*+?()[\]{}|]/g, "\\$&");
     }
-    module2.exports = wrap({ http: http2, https });
+    module2.exports = wrap({ http, https });
     module2.exports.wrap = wrap;
   }
 });
@@ -80536,9 +80536,9 @@ var require_axios = __commonJS({
     var crypto2 = require("crypto");
     var url = require("url");
     var HttpsProxyAgent = require_dist2();
-    var http2 = require("http");
+    var http = require("http");
     var https = require("https");
-    var http22 = require("http2");
+    var http2 = require("http2");
     var util2 = require("util");
     var path = require("path");
     var followRedirects = require_follow_redirects();
@@ -82787,7 +82787,7 @@ var require_axios = __commonJS({
             }
           }
         }
-        const session = http22.connect(authority, options);
+        const session = http2.connect(authority, options);
         let removed;
         let timer;
         const removeSession = () => {
@@ -83483,7 +83483,7 @@ var require_axios = __commonJS({
       return Boolean(agentOptions && utils$1.hasOwnProp(agentOptions, "proxyEnv") && agentOptions.proxyEnv != null);
     }
     function getProxyEnvAgent(options, configHttpAgent, configHttpsAgent) {
-      return isHttps.test(options.protocol) ? configHttpsAgent || https.globalAgent : configHttpAgent || http2.globalAgent;
+      return isHttps.test(options.protocol) ? configHttpsAgent || https.globalAgent : configHttpAgent || http.globalAgent;
     }
     function getDirectAgent(configuredAgent, transport) {
       if (!process.allowedNodeEnvironmentFlags || !process.allowedNodeEnvironmentFlags.has("--use-env-proxy")) {
@@ -83522,7 +83522,7 @@ var require_axios = __commonJS({
     }
     function setDirectAgent(options, configHttpAgent, configHttpsAgent) {
       const secure = isHttps.test(options.protocol);
-      const agent = getDirectAgent(secure ? configHttpsAgent : configHttpAgent, secure ? https : http2);
+      const agent = getDirectAgent(secure ? configHttpsAgent : configHttpAgent, secure ? https : http);
       options.agent = agent;
       if (options.agents) {
         options.agents[secure ? "https" : "http"] = agent;
@@ -83785,7 +83785,7 @@ var require_axios = __commonJS({
           HTTP2_HEADER_METHOD,
           HTTP2_HEADER_PATH,
           HTTP2_HEADER_STATUS
-        } = http22.constants;
+        } = http2.constants;
         const http2Headers = {
           [HTTP2_HEADER_SCHEME]: options.protocol.replace(":", ""),
           [HTTP2_HEADER_METHOD]: options.method,
@@ -84116,7 +84116,7 @@ var require_axios = __commonJS({
           if (configTransport) {
             transport = configTransport;
           } else if (maxRedirects === 0) {
-            transport = isHttpsRequest ? https : http2;
+            transport = isHttpsRequest ? https : http;
             isNativeTransport = true;
           } else {
             options.sensitiveHeaders = [];
@@ -86743,7 +86743,7 @@ var require_node5 = __commonJS({
 var require_lib7 = __commonJS({
   "node_modules/domhandler/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -86757,7 +86757,7 @@ var require_lib7 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DomHandler = void 0;
@@ -86994,7 +86994,7 @@ var require_decode_codepoint = __commonJS({
 var require_decode = __commonJS({
   "node_modules/entities/lib/decode.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -87007,18 +87007,18 @@ var require_decode = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
@@ -87030,7 +87030,7 @@ var require_decode = __commonJS({
     exports2.htmlDecodeTree = decode_data_html_js_1.default;
     var decode_data_xml_js_1 = __importDefault2(require_decode_data_xml());
     exports2.xmlDecodeTree = decode_data_xml_js_1.default;
-    var decode_codepoint_js_1 = __importStar3(require_decode_codepoint());
+    var decode_codepoint_js_1 = __importStar2(require_decode_codepoint());
     exports2.decodeCodePoint = decode_codepoint_js_1.default;
     var decode_codepoint_js_2 = require_decode_codepoint();
     Object.defineProperty(exports2, "replaceCodePoint", { enumerable: true, get: function() {
@@ -87750,7 +87750,7 @@ var require_lib9 = __commonJS({
       };
       return __assign2.apply(this, arguments);
     };
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -87763,23 +87763,23 @@ var require_lib9 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.render = void 0;
-    var ElementType = __importStar3(require_lib6());
+    var ElementType = __importStar2(require_lib6());
     var entities_1 = require_lib8();
     var foreignNames_js_1 = require_foreignNames();
     var unencodedElements = /* @__PURE__ */ new Set([
@@ -88611,7 +88611,7 @@ var require_feeds = __commonJS({
 var require_lib10 = __commonJS({
   "node_modules/domutils/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -88625,7 +88625,7 @@ var require_lib10 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.hasChildren = exports2.isDocument = exports2.isComment = exports2.isText = exports2.isCDATA = exports2.isTag = void 0;
@@ -90105,7 +90105,7 @@ var require_Tokenizer = __commonJS({
 var require_Parser = __commonJS({
   "node_modules/htmlparser2/dist/commonjs/Parser.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -90118,12 +90118,12 @@ var require_Parser = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -90136,15 +90136,15 @@ var require_Parser = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.Parser = void 0;
-    var Tokenizer_js_1 = __importStar3(require_Tokenizer());
+    var Tokenizer_js_1 = __importStar2(require_Tokenizer());
     var decode_1 = require_decode2();
     var formTags = /* @__PURE__ */ new Set([
       "input",
@@ -90600,7 +90600,7 @@ var require_Parser = __commonJS({
 var require_commonjs = __commonJS({
   "node_modules/htmlparser2/dist/commonjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -90613,12 +90613,12 @@ var require_commonjs = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -90631,9 +90631,9 @@ var require_commonjs = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
@@ -90683,7 +90683,7 @@ var require_commonjs = __commonJS({
     Object.defineProperty(exports2, "QuoteType", { enumerable: true, get: function() {
       return Tokenizer_js_1.QuoteType;
     } });
-    exports2.ElementType = __importStar3(require_lib6());
+    exports2.ElementType = __importStar2(require_lib6());
     var domutils_1 = require_lib10();
     var domutils_2 = require_lib10();
     Object.defineProperty(exports2, "getFeed", { enumerable: true, get: function() {
@@ -90693,7 +90693,7 @@ var require_commonjs = __commonJS({
     function parseFeed(feed, options = parseFeedDefaultOptions) {
       return (0, domutils_1.getFeed)(parseDOM(feed, options));
     }
-    exports2.DomUtils = __importStar3(require_lib10());
+    exports2.DomUtils = __importStar2(require_lib10());
   }
 });
 
@@ -91631,7 +91631,7 @@ var require_stringify3 = __commonJS({
 var require_commonjs2 = __commonJS({
   "node_modules/css-what/lib/commonjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -91645,7 +91645,7 @@ var require_commonjs2 = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.stringify = exports2.parse = exports2.isTraversal = void 0;
@@ -92707,7 +92707,7 @@ var require_general = __commonJS({
 var require_compile2 = __commonJS({
   "node_modules/css-select/lib/compile.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -92720,18 +92720,18 @@ var require_compile2 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
@@ -92741,7 +92741,7 @@ var require_compile2 = __commonJS({
     exports2.compileToken = exports2.compileUnsafe = exports2.compile = void 0;
     var css_what_1 = require_commonjs2();
     var boolbase_1 = __importDefault2(require_boolbase());
-    var sort_js_1 = __importStar3(require_sort());
+    var sort_js_1 = __importStar2(require_sort());
     var general_js_1 = require_general();
     var subselects_js_1 = require_subselects();
     function compile(selector, options, context) {
@@ -92839,7 +92839,7 @@ var require_compile2 = __commonJS({
 var require_lib12 = __commonJS({
   "node_modules/css-select/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -92852,18 +92852,18 @@ var require_lib12 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
@@ -92871,7 +92871,7 @@ var require_lib12 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.aliases = exports2.pseudos = exports2.filters = exports2.is = exports2.selectOne = exports2.selectAll = exports2.prepareContext = exports2._compileToken = exports2._compileUnsafe = exports2.compile = void 0;
-    var DomUtils = __importStar3(require_lib10());
+    var DomUtils = __importStar2(require_lib10());
     var boolbase_1 = __importDefault2(require_boolbase());
     var compile_js_1 = require_compile2();
     var subselects_js_1 = require_subselects();
@@ -93051,7 +93051,7 @@ var require_lib13 = __commonJS({
       };
       return __assign2.apply(this, arguments);
     };
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -93064,18 +93064,18 @@ var require_lib13 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding3(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
       }
-      __setModuleDefault3(result, mod);
+      __setModuleDefault2(result, mod);
       return result;
     };
     var __spreadArray2 = exports2 && exports2.__spreadArray || function(to, from, pack) {
@@ -93091,8 +93091,8 @@ var require_lib13 = __commonJS({
     exports2.select = exports2.filter = exports2.some = exports2.is = exports2.aliases = exports2.pseudos = exports2.filters = void 0;
     var css_what_1 = require_commonjs2();
     var css_select_1 = require_lib12();
-    var DomUtils = __importStar3(require_lib10());
-    var boolbase = __importStar3(require_boolbase());
+    var DomUtils = __importStar2(require_lib10());
+    var boolbase = __importStar2(require_boolbase());
     var helpers_js_1 = require_helpers3();
     var positionals_js_1 = require_positionals();
     var css_select_2 = require_lib12();
@@ -93322,7 +93322,7 @@ var require_lib13 = __commonJS({
 var require_traversing = __commonJS({
   "node_modules/cheerio/dist/commonjs/api/traversing.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -93335,12 +93335,12 @@ var require_traversing = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -93353,9 +93353,9 @@ var require_traversing = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
@@ -93383,7 +93383,7 @@ var require_traversing = __commonJS({
     exports2.add = add;
     exports2.addBack = addBack;
     var domhandler_1 = require_lib7();
-    var select = __importStar3(require_lib13());
+    var select = __importStar2(require_lib13());
     var utils_js_1 = require_utils12();
     var static_js_1 = require_static();
     var domutils_1 = require_lib10();
@@ -94231,7 +94231,7 @@ var require_extract = __commonJS({
 var require_cheerio = __commonJS({
   "node_modules/cheerio/dist/commonjs/cheerio.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -94244,12 +94244,12 @@ var require_cheerio = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -94262,20 +94262,20 @@ var require_cheerio = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.Cheerio = void 0;
-    var Attributes = __importStar3(require_attributes());
-    var Traversing = __importStar3(require_traversing());
-    var Manipulation = __importStar3(require_manipulation2());
-    var Css = __importStar3(require_css());
-    var Forms = __importStar3(require_forms());
-    var Extract = __importStar3(require_extract());
+    var Attributes = __importStar2(require_attributes());
+    var Traversing = __importStar2(require_traversing());
+    var Manipulation = __importStar2(require_manipulation2());
+    var Css = __importStar2(require_css());
+    var Forms = __importStar2(require_forms());
+    var Extract = __importStar2(require_extract());
     var Cheerio = class {
       /**
        * Instance of cheerio. Methods are specified in the modules. Usage of this
@@ -94310,7 +94310,7 @@ var require_cheerio = __commonJS({
 var require_load = __commonJS({
   "node_modules/cheerio/dist/commonjs/load.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -94323,12 +94323,12 @@ var require_load = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -94341,16 +94341,16 @@ var require_load = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getLoad = getLoad;
     var options_js_1 = require_options();
-    var staticMethods = __importStar3(require_static());
+    var staticMethods = __importStar2(require_static());
     var cheerio_js_1 = require_cheerio();
     var utils_js_1 = require_utils12();
     var htmlparser2_1 = require_commonjs();
@@ -120112,7 +120112,7 @@ var require_client = __commonJS({
     "use strict";
     var assert = require("node:assert");
     var net = require("node:net");
-    var http2 = require("node:http");
+    var http = require("node:http");
     var util2 = require_util2();
     var { ClientStats } = require_stats();
     var { channels } = require_diagnostics();
@@ -120170,7 +120170,7 @@ var require_client = __commonJS({
     var connectH1 = require_client_h1();
     var connectH2 = require_client_h2();
     var kClosedResolve = Symbol("kClosedResolve");
-    var getDefaultNodeMaxHeaderSize = http2 && http2.maxHeaderSize && Number.isInteger(http2.maxHeaderSize) && http2.maxHeaderSize > 0 ? () => http2.maxHeaderSize : () => {
+    var getDefaultNodeMaxHeaderSize = http && http.maxHeaderSize && Number.isInteger(http.maxHeaderSize) && http.maxHeaderSize > 0 ? () => http.maxHeaderSize : () => {
       throw new InvalidArgumentError("http module not available or http.maxHeaderSize invalid");
     };
     var noop = () => {
@@ -138434,7 +138434,7 @@ var require_mime_type = __commonJS({
 var require_commonjs4 = __commonJS({
   "node_modules/cheerio/dist/commonjs/index.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -138447,15 +138447,15 @@ var require_commonjs4 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
     });
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding3(exports3, m, p);
+      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -138468,9 +138468,9 @@ var require_commonjs4 = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
@@ -138492,10 +138492,10 @@ var require_commonjs4 = __commonJS({
       return static_js_1.merge;
     } });
     var parse5_htmlparser2_tree_adapter_1 = require_cjs5();
-    var htmlparser2 = __importStar3(require_commonjs());
+    var htmlparser2 = __importStar2(require_commonjs());
     var parse5_parser_stream_1 = require_cjs6();
     var encoding_sniffer_1 = require_commonjs3();
-    var undici = __importStar3(require_undici());
+    var undici = __importStar2(require_undici());
     var whatwg_mimetype_1 = __importDefault2(require_mime_type());
     var node_stream_1 = require("node:stream");
     var options_js_1 = require_options();
@@ -138601,7 +138601,7 @@ var require_commonjs4 = __commonJS({
 var require_scraper_service = __commonJS({
   "dist/scraper/scraper.service.js"(exports2) {
     "use strict";
-    var __createBinding3 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -138614,7 +138614,7 @@ var require_scraper_service = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     }));
-    var __setModuleDefault3 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     }) : function(o, v) {
       o["default"] = v;
@@ -138625,7 +138625,7 @@ var require_scraper_service = __commonJS({
       else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
       return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
-    var __importStar3 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
+    var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys2 = function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -138638,9 +138638,9 @@ var require_scraper_service = __commonJS({
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
-          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding3(result, mod, k[i]);
+          for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
         }
-        __setModuleDefault3(result, mod);
+        __setModuleDefault2(result, mod);
         return result;
       };
     })();
@@ -138656,7 +138656,7 @@ var require_scraper_service = __commonJS({
     var common_12 = require_common();
     var prisma_service_1 = require_prisma_service();
     var axios_1 = __importDefault2(require_axios());
-    var cheerio = __importStar3(require_commonjs4());
+    var cheerio = __importStar2(require_commonjs4());
     var ScraperService = ScraperService_1 = class ScraperService {
       constructor(prisma) {
         this.prisma = prisma;
@@ -139492,46 +139492,8 @@ var require_app_module = __commonJS({
 });
 
 // dist/main.js
-var __createBinding2 = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
-  if (k2 === void 0) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-    desc = { enumerable: true, get: function() {
-      return m[k];
-    } };
-  }
-  Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-  if (k2 === void 0) k2 = k;
-  o[k2] = m[k];
-}));
-var __setModuleDefault2 = exports && exports.__setModuleDefault || (Object.create ? (function(o, v) {
-  Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-  o["default"] = v;
-});
-var __importStar2 = exports && exports.__importStar || /* @__PURE__ */ (function() {
-  var ownKeys2 = function(o) {
-    ownKeys2 = Object.getOwnPropertyNames || function(o2) {
-      var ar = [];
-      for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
-      return ar;
-    };
-    return ownKeys2(o);
-  };
-  return function(mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) {
-      for (var k = ownKeys2(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding2(result, mod, k[i]);
-    }
-    __setModuleDefault2(result, mod);
-    return result;
-  };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 require_Reflect();
-var http = __importStar2(require("http"));
 var core_1 = require_core3();
 var common_1 = require_common();
 var platform_express_1 = require_platform_express();
@@ -139563,19 +139525,13 @@ function ensureNest() {
   }
   return nestPromise;
 }
-ensureNest().catch((err) => {
-  console.error("Error durante la inicializaci\xF3n de NestJS:", err);
-});
-if (!process.env.VERCEL) {
-  const server = http.createServer(expressApp);
-  const port = Number(process.env.PORT) || 3001;
-  server.listen(port, "0.0.0.0", () => {
-    const logger = new common_1.Logger("Bootstrap");
-    logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
-    logger.log(`API disponible con prefijo /api`);
-  });
-}
 var handler = (req, res) => {
+  if (req.url && (req.url.endsWith("/ping") || req.url.includes("ping"))) {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "text/plain");
+    res.end("PONG");
+    return Promise.resolve();
+  }
   return new Promise((resolve, reject) => {
     res.on("finish", resolve);
     res.on("close", resolve);
@@ -139588,7 +139544,7 @@ var handler = (req, res) => {
     }).catch((err) => {
       console.error("Error inicializando NestJS en handler:", err);
       if (!res.headersSent) {
-        res.statusCode = 500;
+        res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({
           error: "Backend Initialization Error",
