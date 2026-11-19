@@ -9,7 +9,10 @@
   "services": {
     "backend": {
       "root": "backend",
-      "framework": "nestjs"
+      "entrypoint": "dist/bundle.js",
+      "installCommand": "npm install",
+      "buildCommand": "npx prisma generate && npm run build",
+      "includeFiles": "node_modules/.prisma/**"
     },
     "frontend": {
       "root": "frontend",

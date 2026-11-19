@@ -9,8 +9,8 @@
   "scripts": {
     "postinstall": "prisma generate",
     "copy:engine": "node -e \"const fs = require('fs'), path = require('path'), s = path.join('node_modules', '.prisma', 'client'); if (fs.existsSync(s)) for (const f of fs.readdirSync(s)) if (f.endsWith('.node')) fs.copyFileSync(path.join(s, f), path.join('dist', f));\"",
-    "build": "prisma generate && nest build && npm run copy:engine",
-    "vercel-build": "prisma generate && nest build && npm run copy:engine",
+    "build": "nest build && esbuild dist/main.js --bundle --platform=node --target=node20 --outfile=dist/bundle.js --external:@prisma/client --external:.prisma/client --external:class-transformer/storage --external:@nestjs/microservices --external:@nestjs/websockets",
+    "vercel-build": "nest build && esbuild dist/main.js --bundle --platform=node --target=node20 --outfile=dist/bundle.js --external:@prisma/client --external:.prisma/client --external:class-transformer/storage --external:@nestjs/microservices --external:@nestjs/websockets",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "node dist/main",
     "start:dev": "nest start --watch",
@@ -33,6 +33,7 @@
     "cheerio": "^1.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "esbuild": "^0.25.0",
     "express": "^4.21.2",
     "prisma": "^6.4.1",
     "reflect-metadata": "^0.2.2",

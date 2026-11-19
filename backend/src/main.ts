@@ -1,13 +1,18 @@
+import 'reflect-metadata';
+import * as http from 'http';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger, INestApplication } from '@nestjs/common';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
-let appPromise: Promise<INestApplication> | null = null;
-let expressInstance: any = null;
+const express = require('express');
+const expressApp = express();
+
+let nestPromise: Promise<INestApplication> | null = null;
 
 async function bootstrap(): Promise<INestApplication> {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
 
   // Prefijo global para todas las rutas de la API (/api/...)
   app.setGlobalPrefix('api');
@@ -29,54 +34,57 @@ async function bootstrap(): Promise<INestApplication> {
   );
 
   await app.init();
-  expressInstance = app.getHttpAdapter().getInstance();
   logger.log('DataChance CO Backend NestJS inicializado con éxito');
   return app;
 }
 
-// Serverless Handler para Vercel
-const handler = async (req: any, res: any) => {
-  try {
-    if (!appPromise) {
-      appPromise = bootstrap();
-    }
-    await appPromise;
+function ensureNest(): Promise<INestApplication> {
+  if (!nestPromise) {
+    nestPromise = bootstrap();
+  }
+  return nestPromise;
+}
 
+// Iniciar NestJS inmediatamente en segundo plano
+ensureNest().catch((err) => {
+  console.error('Error durante la inicialización de NestJS:', err);
+});
+
+// Middleware que garantiza que NestJS haya completado su inicialización
+expressApp.use(async (req: any, res: any, next: any) => {
+  try {
+    await ensureNest();
     if (req.url && !req.url.startsWith('/api')) {
       req.url = '/api' + req.url;
     }
-
-    return expressInstance(req, res);
+    next();
   } catch (err: any) {
-    console.error('SERVERLESS HANDLER ERROR:', err);
+    console.error('Error en middleware NestJS:', err);
     if (!res.headersSent) {
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
       res.end(
         JSON.stringify({
-          error: 'Backend Serverless Error',
+          error: 'Backend Initialization Error',
           message: err?.message || String(err),
-          stack: err?.stack,
         }),
       );
     }
   }
-};
+});
 
-export default handler;
-// @ts-ignore
-module.exports = handler;
-// @ts-ignore
-module.exports.default = handler;
+// Servidor HTTP creado y escuchando inmediatamente para captura en Vercel
+const server = http.createServer(expressApp);
+const port = Number(process.env.PORT) || 3001;
 
-// Para desarrollo local fuera de Vercel
-if (!process.env.VERCEL) {
-  bootstrap().then((app) => {
-    const port = Number(process.env.PORT) || 3001;
-    app.listen(port, '0.0.0.0', () => {
-      const logger = new Logger('Bootstrap');
-      logger.log(`DataChance CO Backend escuchando en http://localhost:${port}`);
-      logger.log(`API disponible con prefijo /api`);
-    });
-  });
-}
+server.listen(port, '0.0.0.0', () => {
+  const logger = new Logger('Bootstrap');
+  logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
+  logger.log(`API disponible con prefijo /api`);
+});
+
+export default expressApp;
+// @ts-ignore
+module.exports = expressApp;
+// @ts-ignore
+module.exports.default = expressApp;
