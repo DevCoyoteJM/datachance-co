@@ -1,15 +1,16 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger, INestApplication } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+import express, { Request, Response } from 'express';
 
-let nestApp: INestApplication | null = null;
-let expressServer: any = null;
+const server = express();
+let isInitialized = false;
 
-async function bootstrap(): Promise<INestApplication> {
-  if (nestApp) return nestApp;
+async function bootstrap() {
+  if (isInitialized) return server;
 
-  const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   // Prefijo global para todas las rutas de la API (/api/...)
   app.setGlobalPrefix('api');
@@ -30,35 +31,24 @@ async function bootstrap(): Promise<INestApplication> {
     }),
   );
 
-  nestApp = app;
-  expressServer = app.getHttpAdapter().getInstance();
-
-  const port = Number(process.env.PORT) || 3000;
-  await app.listen(port, '0.0.0.0');
-  logger.log(`DataChance CO Backend escuchando en el puerto ${port}`);
-  logger.log(`API disponible con prefijo /api`);
-  return app;
+  await app.init();
+  isInitialized = true;
+  return server;
 }
 
-// Iniciar bootstrap inmediatamente tanto para standalone como para Fluid Compute
-const bootstrapPromise = bootstrap().catch((err) => {
-  console.error('Error fatal durante bootstrap de NestJS:', err);
-  throw err;
-});
-
-// Handler exportado en caso de invocación directa como Serverless Function
-const handler = async (req: any, res: any) => {
+// Serverless Handler para Vercel
+const handler = async (req: Request, res: Response) => {
   try {
-    await bootstrapPromise;
+    const app = await bootstrap();
     if (req.url && !req.url.startsWith('/api')) {
       req.url = '/api' + req.url;
     }
-    return expressServer(req, res);
+    return app(req, res);
   } catch (err: any) {
-    console.error('SERVERLESS BOOTSTRAP HANDLER ERROR:', err);
+    console.error('SERVERLESS HANDLER ERROR:', err);
     if (!res.headersSent) {
       res.status(500).json({
-        error: 'Backend Bootstrap Error',
+        error: 'Backend Serverless Error',
         message: err?.message || String(err),
         stack: err?.stack,
         env: {
@@ -75,3 +65,15 @@ export default handler;
 module.exports = handler;
 // @ts-ignore
 module.exports.default = handler;
+
+// Para desarrollo local fuera de Vercel
+if (!process.env.VERCEL) {
+  bootstrap().then(() => {
+    const port = Number(process.env.PORT) || 3001;
+    server.listen(port, () => {
+      const logger = new Logger('Bootstrap');
+      logger.log(`DataChance CO Backend escuchando en http://localhost:${port}`);
+      logger.log(`API disponible con prefijo /api`);
+    });
+  });
+}
