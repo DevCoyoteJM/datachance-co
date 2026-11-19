@@ -62,28 +62,36 @@ if (!process.env.VERCEL) {
   });
 }
 
-// Handler serverless para Vercel Functions
-const handler = async (req: any, res: any) => {
-  try {
-    await ensureNest();
-    if (req.url && !req.url.startsWith('/api')) {
-      req.url = '/api' + req.url;
-    }
-    return expressApp(req, res);
-  } catch (err: any) {
-    console.error('Error crítico en handler serverless:', err);
-    if (!res.headersSent) {
-      res.statusCode = 500;
-      res.setHeader('Content-Type', 'application/json');
-      res.end(
-        JSON.stringify({
-          error: 'Backend Initialization Error',
-          message: err?.message || String(err),
-          stack: err?.stack || null,
-        }),
-      );
-    }
-  }
+// Handler serverless para Vercel Functions que espera el fin de la respuesta
+const handler = (req: any, res: any) => {
+  return new Promise((resolve, reject) => {
+    res.on('finish', resolve);
+    res.on('close', resolve);
+    res.on('error', reject);
+
+    ensureNest()
+      .then(() => {
+        if (req.url && !req.url.startsWith('/api')) {
+          req.url = '/api' + req.url;
+        }
+        expressApp(req, res);
+      })
+      .catch((err: any) => {
+        console.error('Error inicializando NestJS en handler:', err);
+        if (!res.headersSent) {
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(
+            JSON.stringify({
+              error: 'Backend Initialization Error',
+              message: err?.message || String(err),
+              stack: err?.stack || null,
+            }),
+          );
+        }
+        resolve(null);
+      });
+  });
 };
 
 export default handler;
