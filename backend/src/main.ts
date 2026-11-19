@@ -73,15 +73,17 @@ expressApp.use(async (req: any, res: any, next: any) => {
   }
 });
 
-// Servidor HTTP creado y escuchando inmediatamente para captura en Vercel
-const server = http.createServer(expressApp);
-const port = Number(process.env.PORT) || 3001;
+// Servidor HTTP local (en desarrollo / local no-Vercel)
+if (!process.env.VERCEL) {
+  const server = http.createServer(expressApp);
+  const port = Number(process.env.PORT) || 3001;
 
-server.listen(port, '0.0.0.0', () => {
-  const logger = new Logger('Bootstrap');
-  logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
-  logger.log(`API disponible con prefijo /api`);
-});
+  server.listen(port, '0.0.0.0', () => {
+    const logger = new Logger('Bootstrap');
+    logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
+    logger.log(`API disponible con prefijo /api`);
+  });
+}
 
 export default expressApp;
 // @ts-ignore
