@@ -1,16 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import express, { Request, Response } from 'express';
-
-const server = express();
-let isInitialized = false;
 
 async function bootstrap() {
-  if (isInitialized) return server;
-
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const logger = new Logger('Bootstrap');
+  const app = await NestFactory.create(AppModule);
 
   // Prefijo global para todas las rutas de la API (/api/...)
   app.setGlobalPrefix('api');
@@ -31,49 +25,10 @@ async function bootstrap() {
     }),
   );
 
-  await app.init();
-  isInitialized = true;
-  return server;
+  const port = Number(process.env.PORT) || 3000;
+  await app.listen(port, '0.0.0.0');
+  logger.log(`DataChance CO Backend escuchando en http://0.0.0.0:${port}`);
+  logger.log(`API disponible con prefijo /api`);
 }
 
-// Serverless Handler para Vercel
-const handler = async (req: Request, res: Response) => {
-  try {
-    const app = await bootstrap();
-    if (req.url && !req.url.startsWith('/api')) {
-      req.url = '/api' + req.url;
-    }
-    return app(req, res);
-  } catch (err: any) {
-    console.error('SERVERLESS HANDLER ERROR:', err);
-    if (!res.headersSent) {
-      res.status(500).json({
-        error: 'Backend Serverless Error',
-        message: err?.message || String(err),
-        stack: err?.stack,
-        env: {
-          hasDatabaseUrl: !!process.env.DATABASE_URL,
-          hasDirectUrl: !!process.env.DIRECT_URL,
-        },
-      });
-    }
-  }
-};
-
-export default handler;
-// @ts-ignore
-module.exports = handler;
-// @ts-ignore
-module.exports.default = handler;
-
-// Para desarrollo local fuera de Vercel
-if (!process.env.VERCEL) {
-  bootstrap().then(() => {
-    const port = Number(process.env.PORT) || 3001;
-    server.listen(port, () => {
-      const logger = new Logger('Bootstrap');
-      logger.log(`DataChance CO Backend escuchando en http://localhost:${port}`);
-      logger.log(`API disponible con prefijo /api`);
-    });
-  });
-}
+bootstrap();
