@@ -1,10 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
+const express = require('express');
+const server = express();
+let isInitialized = false;
+
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  if (isInitialized) return server;
+
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   // Prefijo global para todas las rutas de la API (/api/...)
   app.setGlobalPrefix('api');
@@ -25,10 +31,49 @@ async function bootstrap() {
     }),
   );
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  logger.log(`DataChance CO Backend escuchando en el puerto ${port}`);
-  logger.log(`API disponible con prefijo /api`);
+  await app.init();
+  isInitialized = true;
+  return server;
 }
 
-bootstrap();
+// Serverless Handler para Vercel
+const handler = async (req: any, res: any) => {
+  try {
+    await bootstrap();
+    if (req.url && !req.url.startsWith('/api')) {
+      req.url = '/api' + req.url;
+    }
+    return server(req, res);
+  } catch (err: any) {
+    console.error('SERVERLESS BOOTSTRAP ERROR:', err);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: 'Backend Bootstrap Error',
+        message: err?.message || String(err),
+        stack: err?.stack,
+        env: {
+          hasDatabaseUrl: !!process.env.DATABASE_URL,
+          hasDirectUrl: !!process.env.DIRECT_URL,
+        },
+      });
+    }
+  }
+};
+
+export default handler;
+// @ts-ignore
+module.exports = handler;
+// @ts-ignore
+module.exports.default = handler;
+
+// Para ejecución local independiente fuera de Vercel
+if (!process.env.VERCEL) {
+  bootstrap().then(() => {
+    const port = process.env.PORT || 3001;
+    server.listen(port, () => {
+      const logger = new Logger('Bootstrap');
+      logger.log(`DataChance CO Backend escuchando en puerto ${port}`);
+      logger.log(`API disponible con prefijo /api`);
+    });
+  });
+}
