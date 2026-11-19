@@ -1,5 +1,6 @@
 node_modules/
 dist/
+!dist/bundle.js
 *.log
 .env
 dev.db-journal

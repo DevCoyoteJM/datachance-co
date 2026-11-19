@@ -5,6 +5,7 @@ node_modules/
 # Production builds
 dist/
 */dist/
+!backend/dist/bundle.js
 
 # SQLite databases & temp files
 *.db
