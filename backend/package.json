@@ -8,7 +8,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "postinstall": "prisma generate",
-    "build": "prisma generate && nest build",
+    "copy:engine": "node -e \"const fs = require('fs'), path = require('path'), s = path.join('node_modules', '.prisma', 'client'); if (fs.existsSync(s)) for (const f of fs.readdirSync(s)) if (f.endsWith('.node')) fs.copyFileSync(path.join(s, f), path.join('dist', f));\"",
+    "build": "prisma generate && nest build && npm run copy:engine",
+    "vercel-build": "prisma generate && nest build && npm run copy:engine",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "node dist/main",
     "start:dev": "nest start --watch",
