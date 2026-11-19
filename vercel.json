@@ -9,11 +9,11 @@
   "services": {
     "backend": {
       "root": "backend",
-      "entrypoint": "dist/bundle.js",
+      "entrypoint": "index.js",
       "installCommand": "npm install",
       "buildCommand": "npx prisma generate && npm run build",
       "functions": {
-        "dist/bundle.js": {
+        "index.js": {
           "includeFiles": "node_modules/.prisma/**"
         }
       }
