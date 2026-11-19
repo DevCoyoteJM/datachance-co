@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Sparkles,
   RefreshCw,
   BarChart3,
   Calculator,
@@ -83,10 +82,64 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab('dashboard')}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px] shadow-glowGreen">
-              <div className="w-full h-full bg-[#0B0F19] rounded-xl flex items-center justify-center group-hover:bg-[#151C2C] transition-colors">
-                <Sparkles className="w-5 h-5 text-neon-emerald animate-pulse" />
-              </div>
+            <div className="relative flex items-center justify-center">
+              {/* Resplandor verde esmeralda animado */}
+              <div className="absolute inset-0 rounded-full bg-emerald-500/25 blur-md animate-pulse" />
+              
+              {/* Ícono vectorial de balota de lotería con 3 líneas de movimiento */}
+              <svg
+                className="w-10 h-10 relative z-10 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)] group-hover:scale-105 transition-transform duration-300"
+                viewBox="0 0 64 64"
+                width="40"
+                height="40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="navBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0F172A" />
+                    <stop offset="100%" stopColor="#0B0F19" />
+                  </linearGradient>
+                  <linearGradient id="navBallGrad" x1="25%" y1="20%" x2="75%" y2="80%">
+                    <stop offset="0%" stopColor="#34D399" />
+                    <stop offset="50%" stopColor="#10B981" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
+
+                {/* Fondo circular oscuro (#0B0F19) con anillo verde esmeralda (#10B981) */}
+                <circle cx="32" cy="32" r="30" fill="url(#navBgGrad)" stroke="#10B981" strokeWidth="2.5" />
+
+                {/* 3 rayas verticales de movimiento arriba con destello/pulso */}
+                <g className="animate-pulse">
+                  <line x1="23" y1="12" x2="23" y2="18" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" />
+                  <line x1="32" y1="9" x2="32" y2="17" stroke="#10B981" strokeWidth="3" strokeLinecap="round" />
+                  <line x1="41" y1="12" x2="41" y2="18" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" />
+                </g>
+
+                {/* Balota de lotería esmeralda/blanca */}
+                <circle cx="32" cy="39" r="17" fill="url(#navBallGrad)" stroke="#047857" strokeWidth="1" />
+                
+                {/* Brillo especular 3D de la balota */}
+                <ellipse cx="26" cy="29" rx="4.5" ry="2.5" fill="#FFFFFF" fillOpacity="0.4" transform="rotate(-30 26 29)" />
+
+                {/* Parche circular blanco central de la balota */}
+                <circle cx="32" cy="39" r="9.5" fill="#FFFFFF" stroke="#A7F3D0" strokeWidth="0.75" />
+
+                {/* Número 7 nítido y centrado */}
+                <text
+                  x="32"
+                  y="39.5"
+                  fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                  fontWeight="900"
+                  fontSize="12"
+                  fill="#064E3B"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                >
+                  7
+                </text>
+              </svg>
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -94,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   DataChance <span className="text-neon-emerald">CO</span>
                 </span>
                 <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Fintech Analytics
+                  DATOS REALES • CO
                 </span>
               </div>
               <p className="text-xs text-gray-400 hidden sm:block">
