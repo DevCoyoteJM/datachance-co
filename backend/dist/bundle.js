@@ -4505,15 +4505,15 @@ var require_streamable_file = __commonJS({
       get errorHandler() {
         return this.handleError;
       }
-      setErrorHandler(handler) {
-        this.handleError = handler;
+      setErrorHandler(handler2) {
+        this.handleError = handler2;
         return this;
       }
       get errorLogger() {
         return this.logError;
       }
-      setErrorLogger(handler) {
-        this.logError = handler;
+      setErrorLogger(handler2) {
+        this.logError = handler2;
         return this;
       }
     };
@@ -26094,16 +26094,16 @@ var require_timeoutProvider = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.timeoutProvider = void 0;
     exports2.timeoutProvider = {
-      setTimeout: function(handler, timeout) {
+      setTimeout: function(handler2, timeout) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
           args[_i - 2] = arguments[_i];
         }
         var delegate = exports2.timeoutProvider.delegate;
         if (delegate === null || delegate === void 0 ? void 0 : delegate.setTimeout) {
-          return delegate.setTimeout.apply(delegate, __spreadArray2([handler, timeout], __read2(args)));
+          return delegate.setTimeout.apply(delegate, __spreadArray2([handler2, timeout], __read2(args)));
         }
-        return setTimeout.apply(void 0, __spreadArray2([handler, timeout], __read2(args)));
+        return setTimeout.apply(void 0, __spreadArray2([handler2, timeout], __read2(args)));
       },
       clearTimeout: function(handle) {
         var delegate = exports2.timeoutProvider.delegate;
@@ -27296,16 +27296,16 @@ var require_intervalProvider = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.intervalProvider = void 0;
     exports2.intervalProvider = {
-      setInterval: function(handler, timeout) {
+      setInterval: function(handler2, timeout) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
           args[_i - 2] = arguments[_i];
         }
         var delegate = exports2.intervalProvider.delegate;
         if (delegate === null || delegate === void 0 ? void 0 : delegate.setInterval) {
-          return delegate.setInterval.apply(delegate, __spreadArray2([handler, timeout], __read2(args)));
+          return delegate.setInterval.apply(delegate, __spreadArray2([handler2, timeout], __read2(args)));
         }
-        return setInterval.apply(void 0, __spreadArray2([handler, timeout], __read2(args)));
+        return setInterval.apply(void 0, __spreadArray2([handler2, timeout], __read2(args)));
       },
       clearInterval: function(handle) {
         var delegate = exports2.intervalProvider.delegate;
@@ -35092,8 +35092,8 @@ var require_fromEvent = __commonJS({
         return fromEvent(target, eventName, options).pipe(mapOneOrManyArgs_1.mapOneOrManyArgs(resultSelector));
       }
       var _a = __read2(isEventTarget(target) ? eventTargetMethods.map(function(methodName) {
-        return function(handler) {
-          return target[methodName](eventName, handler, options);
+        return function(handler2) {
+          return target[methodName](eventName, handler2, options);
         };
       }) : isNodeStyleEventEmitter(target) ? nodeEventEmitterMethods.map(toCommonHandlerRegistry(target, eventName)) : isJQueryStyleEventEmitter(target) ? jqueryMethods.map(toCommonHandlerRegistry(target, eventName)) : [], 2), add = _a[0], remove = _a[1];
       if (!add) {
@@ -35107,24 +35107,24 @@ var require_fromEvent = __commonJS({
         throw new TypeError("Invalid event target");
       }
       return new Observable_1.Observable(function(subscriber) {
-        var handler = function() {
+        var handler2 = function() {
           var args = [];
           for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
           }
           return subscriber.next(1 < args.length ? args : args[0]);
         };
-        add(handler);
+        add(handler2);
         return function() {
-          return remove(handler);
+          return remove(handler2);
         };
       });
     }
     exports2.fromEvent = fromEvent;
     function toCommonHandlerRegistry(target, eventName) {
       return function(methodName) {
-        return function(handler) {
-          return target[methodName](eventName, handler);
+        return function(handler2) {
+          return target[methodName](eventName, handler2);
         };
       };
     }
@@ -35154,16 +35154,16 @@ var require_fromEventPattern = __commonJS({
         return fromEventPattern(addHandler, removeHandler).pipe(mapOneOrManyArgs_1.mapOneOrManyArgs(resultSelector));
       }
       return new Observable_1.Observable(function(subscriber) {
-        var handler = function() {
+        var handler2 = function() {
           var e = [];
           for (var _i = 0; _i < arguments.length; _i++) {
             e[_i] = arguments[_i];
           }
           return subscriber.next(e.length === 1 ? e[0] : e);
         };
-        var retValue = addHandler(handler);
+        var retValue = addHandler(handler2);
         return isFunction_1.isFunction(removeHandler) ? function() {
-          return removeHandler(handler, retValue);
+          return removeHandler(handler2, retValue);
         } : void 0;
       });
     }
@@ -36779,10 +36779,10 @@ var require_execution_context_host = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ExecutionContextHost = void 0;
     var ExecutionContextHost = class {
-      constructor(args, constructorRef = null, handler = null) {
+      constructor(args, constructorRef = null, handler2 = null) {
         this.args = args;
         this.constructorRef = constructorRef;
-        this.handler = handler;
+        this.handler = handler2;
         this.contextType = "http";
       }
       setType(type) {
@@ -36969,10 +36969,10 @@ var require_interceptors_consumer = __commonJS({
           if (i >= interceptors.length) {
             return (0, rxjs_1.defer)(async_hooks_1.AsyncResource.bind(() => this.transformDeferred(next)));
           }
-          const handler = {
+          const handler2 = {
             handle: () => (0, rxjs_1.defer)(async_hooks_1.AsyncResource.bind(() => nextFn(i + 1))).pipe((0, operators_1.mergeAll)())
           };
-          return interceptors[i].intercept(context, handler);
+          return interceptors[i].intercept(context, handler2);
         };
         return (0, rxjs_1.defer)(() => nextFn()).pipe((0, operators_1.mergeAll)());
       }
@@ -37375,7 +37375,7 @@ var require_external_context_creator = __commonJS({
         const paramsOptions = paramsMetadata ? this.contextUtils.mergeParamsMetatypes(paramsMetadata, paramtypes) : [];
         const fnCanActivate = options.guards ? this.createGuardsFn(guards, instance, callback, contextType) : null;
         const fnApplyPipes = this.createPipesFn(pipes, paramsOptions);
-        const handler = (initialArgs, ...args) => async () => {
+        const handler2 = (initialArgs, ...args) => async () => {
           if (fnApplyPipes) {
             await fnApplyPipes(initialArgs, ...args);
             return callback.apply(instance, initialArgs);
@@ -37385,7 +37385,7 @@ var require_external_context_creator = __commonJS({
         const target = async (...args) => {
           const initialArgs = this.contextUtils.createNullArray(argsLength);
           fnCanActivate && await fnCanActivate(args);
-          const result = await this.interceptorsConsumer.intercept(interceptors, args, instance, callback, handler(initialArgs, ...args), contextType);
+          const result = await this.interceptorsConsumer.intercept(interceptors, args, instance, callback, handler2(initialArgs, ...args), contextType);
           return this.transformToResult(result);
         };
         return options.filters ? this.externalErrorProxy.createProxy(target, exceptionFilter, contextType) : target;
@@ -42543,7 +42543,7 @@ var require_router_execution_context = __commonJS({
         const interceptors = this.interceptorsContextCreator.create(instance, callback, moduleKey, contextId, inquirerId);
         const fnCanActivate = this.createGuardsFn(guards, instance, callback, contextType);
         const fnApplyPipes = this.createPipesFn(pipes, paramsOptions);
-        const handler = (args, req, res, next) => async () => {
+        const handler2 = (args, req, res, next) => async () => {
           fnApplyPipes && await fnApplyPipes(args, req, res, next);
           return callback.apply(instance, args);
         };
@@ -42552,7 +42552,7 @@ var require_router_execution_context = __commonJS({
           fnCanActivate && await fnCanActivate([req, res, next]);
           this.responseController.setStatus(res, httpStatusCode);
           hasCustomHeaders && this.responseController.setHeaders(res, responseHeaders);
-          const result = await this.interceptorsConsumer.intercept(interceptors, [req, res, next], instance, callback, handler(args, req, res, next), contextType);
+          const result = await this.interceptorsConsumer.intercept(interceptors, [req, res, next], instance, callback, handler2(args, req, res, next), contextType);
           await fnHandleResponse(result, res, req);
         };
       }
@@ -42801,9 +42801,9 @@ var require_router_explorer = __commonJS({
           });
         });
       }
-      applyHostFilter(host, handler) {
+      applyHostFilter(host, handler2) {
         if (!host) {
-          return handler;
+          return handler2;
         }
         const httpAdapterRef = this.container.getHttpAdapterRef();
         const hosts = Array.isArray(host) ? host : [host];
@@ -42826,7 +42826,7 @@ var require_router_explorer = __commonJS({
                   req.hosts[groupName] = match.groups[groupName];
                 }
               }
-              return handler(req, res, next);
+              return handler2(req, res, next);
             }
           }
           if (!next) {
@@ -42835,9 +42835,9 @@ var require_router_explorer = __commonJS({
           return next();
         };
       }
-      applyVersionFilter(router, routePathMetadata, handler) {
+      applyVersionFilter(router, routePathMetadata, handler2) {
         const version = this.routePathFactory.getVersion(routePathMetadata);
-        return router.applyVersionFilter(handler, version, routePathMetadata.versioningOptions);
+        return router.applyVersionFilter(handler2, version, routePathMetadata.versioningOptions);
       }
       createCallbackProxy(instance, callback, methodName, moduleRef, requestMethod, contextId = constants_2.STATIC_CONTEXT, inquirerId) {
         const executionContext = this.executionContextCreator.create(instance, callback, methodName, moduleRef, requestMethod, contextId, inquirerId);
@@ -42968,16 +42968,16 @@ var require_routes_resolver = __commonJS({
           const url = applicationRef.getRequestUrl(req);
           throw new common_12.NotFoundException(`Cannot ${method} ${url}`);
         };
-        const handler = this.routerExceptionsFilter.create({}, callback, void 0);
-        const proxy = this.routerProxy.createProxy(callback, handler);
+        const handler2 = this.routerExceptionsFilter.create({}, callback, void 0);
+        const proxy = this.routerProxy.createProxy(callback, handler2);
         applicationRef.setNotFoundHandler && applicationRef.setNotFoundHandler(proxy, this.applicationConfig.getGlobalPrefix());
       }
       registerExceptionHandler() {
         const callback = (err, req, res, next) => {
           throw this.mapExternalException(err);
         };
-        const handler = this.routerExceptionsFilter.create({}, callback, void 0);
-        const proxy = this.routerProxy.createExceptionLayerProxy(callback, handler);
+        const handler2 = this.routerExceptionsFilter.create({}, callback, void 0);
+        const proxy = this.routerProxy.createExceptionLayerProxy(callback, handler2);
         const applicationRef = this.container.getHttpAdapterRef();
         applicationRef.setErrorHandler && applicationRef.setErrorHandler(proxy, this.applicationConfig.getGlobalPrefix());
       }
@@ -66960,11 +66960,11 @@ var require_express_adapter = __commonJS({
       redirect(response, statusCode, url) {
         return response.redirect(statusCode, url);
       }
-      setErrorHandler(handler, prefix) {
-        return this.use(handler);
+      setErrorHandler(handler2, prefix) {
+        return this.use(handler2);
       }
-      setNotFoundHandler(handler, prefix) {
-        return this.use(handler);
+      setNotFoundHandler(handler2, prefix) {
+        return this.use(handler2);
       }
       isHeadersSent(response) {
         return response.headersSent;
@@ -67062,7 +67062,7 @@ var require_express_adapter = __commonJS({
       getType() {
         return "express";
       }
-      applyVersionFilter(handler, version, versioningOptions) {
+      applyVersionFilter(handler2, version, versioningOptions) {
         const callNextHandler = (req, res, next) => {
           if (!next) {
             throw new common_12.InternalServerErrorException("HTTP adapter does not support filtering on version");
@@ -67071,7 +67071,7 @@ var require_express_adapter = __commonJS({
         };
         if (version === common_12.VERSION_NEUTRAL || // URL Versioning is done via the path, so the filter continues forward
         versioningOptions.type === common_12.VersioningType.URI) {
-          const handlerForNoVersioning = (req, res, next) => handler(req, res, next);
+          const handlerForNoVersioning = (req, res, next) => handler2(req, res, next);
           return handlerForNoVersioning;
         }
         if (versioningOptions.type === common_12.VersioningType.CUSTOM) {
@@ -67079,17 +67079,17 @@ var require_express_adapter = __commonJS({
             const extractedVersion = versioningOptions.extractor(req);
             if (Array.isArray(version)) {
               if (Array.isArray(extractedVersion) && version.filter((v) => extractedVersion.includes(v)).length) {
-                return handler(req, res, next);
+                return handler2(req, res, next);
               }
               if ((0, shared_utils_1.isString)(extractedVersion) && version.includes(extractedVersion)) {
-                return handler(req, res, next);
+                return handler2(req, res, next);
               }
             } else if ((0, shared_utils_1.isString)(version)) {
               if (Array.isArray(extractedVersion) && extractedVersion.includes(version)) {
-                return handler(req, res, next);
+                return handler2(req, res, next);
               }
               if ((0, shared_utils_1.isString)(extractedVersion) && version === extractedVersion) {
-                return handler(req, res, next);
+                return handler2(req, res, next);
               }
             }
             return callNextHandler(req, res, next);
@@ -67104,18 +67104,18 @@ var require_express_adapter = __commonJS({
             if ((0, shared_utils_1.isUndefined)(acceptHeaderVersionParameter)) {
               if (Array.isArray(version)) {
                 if (version.includes(common_12.VERSION_NEUTRAL)) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               }
             } else {
               const headerVersion = acceptHeaderVersionParameter.split(versioningOptions.key)[1];
               if (Array.isArray(version)) {
                 if (version.includes(headerVersion)) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               } else if ((0, shared_utils_1.isString)(version)) {
                 if (version === headerVersion) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               }
             }
@@ -67129,17 +67129,17 @@ var require_express_adapter = __commonJS({
             if ((0, shared_utils_1.isUndefined)(customHeaderVersionParameter)) {
               if (Array.isArray(version)) {
                 if (version.includes(common_12.VERSION_NEUTRAL)) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               }
             } else {
               if (Array.isArray(version)) {
                 if (version.includes(customHeaderVersionParameter)) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               } else if ((0, shared_utils_1.isString)(version)) {
                 if (version === customHeaderVersionParameter) {
-                  return handler(req, res, next);
+                  return handler2(req, res, next);
                 }
               }
             }
@@ -81974,7 +81974,7 @@ var require_axios = __commonJS({
        * @return {Number} An ID used to remove interceptor later
        */
       use(fulfilled, rejected, options) {
-        const handler = {
+        const handler2 = {
           fulfilled,
           rejected,
           synchronous: options ? options.synchronous : false,
@@ -81986,9 +81986,9 @@ var require_axios = __commonJS({
         }
         syncHandlerEntries(this, internals);
         const id = internals.nextId++;
-        this.handlers.push(handler);
+        this.handlers.push(handler2);
         internals.handlerEntries.set(id, {
-          handler,
+          handler: handler2,
           index: this.handlers.length - 1
         });
         internals.handlersLength = this.handlers.length;
@@ -90661,20 +90661,20 @@ var require_commonjs = __commonJS({
       return domhandler_2.DomHandler;
     } });
     function parseDocument(data, options) {
-      const handler = new domhandler_1.DomHandler(void 0, options);
-      new Parser_js_1.Parser(handler, options).end(data);
-      return handler.root;
+      const handler2 = new domhandler_1.DomHandler(void 0, options);
+      new Parser_js_1.Parser(handler2, options).end(data);
+      return handler2.root;
     }
     function parseDOM(data, options) {
       return parseDocument(data, options).children;
     }
     function createDocumentStream(callback, options, elementCallback) {
-      const handler = new domhandler_1.DomHandler((error) => callback(error, handler.root), options, elementCallback);
-      return new Parser_js_1.Parser(handler, options);
+      const handler2 = new domhandler_1.DomHandler((error) => callback(error, handler2.root), options, elementCallback);
+      return new Parser_js_1.Parser(handler2, options);
     }
     function createDomStream(callback, options, elementCallback) {
-      const handler = new domhandler_1.DomHandler(callback, options, elementCallback);
-      return new Parser_js_1.Parser(handler, options);
+      const handler2 = new domhandler_1.DomHandler(callback, options, elementCallback);
+      return new Parser_js_1.Parser(handler2, options);
     }
     var Tokenizer_js_1 = require_Tokenizer();
     Object.defineProperty(exports2, "Tokenizer", { enumerable: true, get: function() {
@@ -94632,8 +94632,8 @@ var require_preprocessor = __commonJS({
     var error_codes_js_1 = require_error_codes();
     var DEFAULT_BUFFER_WATERLINE = 1 << 16;
     var Preprocessor = class {
-      constructor(handler) {
-        this.handler = handler;
+      constructor(handler2) {
+        this.handler = handler2;
         this.html = "";
         this.pos = -1;
         this.lastGapPos = -2;
@@ -95989,9 +95989,9 @@ var require_tokenizer = __commonJS({
       return null;
     }
     var Tokenizer = class {
-      constructor(options, handler) {
+      constructor(options, handler2) {
         this.options = options;
-        this.handler = handler;
+        this.handler = handler2;
         this.paused = false;
         this.inLoop = false;
         this.inForeignNode = false;
@@ -96004,12 +96004,12 @@ var require_tokenizer = __commonJS({
         this.currentCharacterToken = null;
         this.currentToken = null;
         this.currentAttr = { name: "", value: "" };
-        this.preprocessor = new preprocessor_js_1.Preprocessor(handler);
+        this.preprocessor = new preprocessor_js_1.Preprocessor(handler2);
         this.currentLocation = this.getCurrentLocation(-1);
         this.entityDecoder = new decode_1.EntityDecoder(decode_1.htmlDecodeTree, (cp, consumed) => {
           this.preprocessor.pos = this.entityStartPos + consumed - 1;
           this._flushCodePointConsumedAsCharacterReference(cp);
-        }, handler.onParseError ? {
+        }, handler2.onParseError ? {
           missingSemicolonAfterCharacterReference: () => {
             this._err(error_codes_js_1.ERR.missingSemicolonAfterCharacterReference, 1);
           },
@@ -98526,9 +98526,9 @@ var require_open_element_stack = __commonJS({
       get currentTmplContentOrNode() {
         return this._isInTemplate() ? this.treeAdapter.getTemplateContent(this.current) : this.current;
       }
-      constructor(document2, treeAdapter, handler) {
+      constructor(document2, treeAdapter, handler2) {
         this.treeAdapter = treeAdapter;
-        this.handler = handler;
+        this.handler = handler2;
         this.items = [];
         this.tagIDs = [];
         this.stackTop = -1;
@@ -112739,34 +112739,34 @@ var require_util2 = __commonJS({
     function isBuffer(buffer) {
       return buffer instanceof Uint8Array || Buffer.isBuffer(buffer);
     }
-    function assertRequestHandler(handler, method, upgrade) {
-      if (!handler || typeof handler !== "object") {
+    function assertRequestHandler(handler2, method, upgrade) {
+      if (!handler2 || typeof handler2 !== "object") {
         throw new InvalidArgumentError("handler must be an object");
       }
-      if (typeof handler.onRequestStart === "function") {
+      if (typeof handler2.onRequestStart === "function") {
         return;
       }
-      if (typeof handler.onConnect !== "function") {
+      if (typeof handler2.onConnect !== "function") {
         throw new InvalidArgumentError("invalid onConnect method");
       }
-      if (typeof handler.onError !== "function") {
+      if (typeof handler2.onError !== "function") {
         throw new InvalidArgumentError("invalid onError method");
       }
-      if (typeof handler.onBodySent !== "function" && handler.onBodySent !== void 0) {
+      if (typeof handler2.onBodySent !== "function" && handler2.onBodySent !== void 0) {
         throw new InvalidArgumentError("invalid onBodySent method");
       }
       if (upgrade || method === "CONNECT") {
-        if (typeof handler.onUpgrade !== "function") {
+        if (typeof handler2.onUpgrade !== "function") {
           throw new InvalidArgumentError("invalid onUpgrade method");
         }
       } else {
-        if (typeof handler.onHeaders !== "function") {
+        if (typeof handler2.onHeaders !== "function") {
           throw new InvalidArgumentError("invalid onHeaders method");
         }
-        if (typeof handler.onData !== "function") {
+        if (typeof handler2.onData !== "function") {
           throw new InvalidArgumentError("invalid onData method");
         }
-        if (typeof handler.onComplete !== "function") {
+        if (typeof handler2.onComplete !== "function") {
           throw new InvalidArgumentError("invalid onComplete method");
         }
       }
@@ -113594,7 +113594,7 @@ var require_request3 = __commonJS({
         throwOnError,
         maxRedirections,
         typeOfService
-      }, handler) {
+      }, handler2) {
         if (typeof path !== "string") {
           throw new InvalidArgumentError("path must be a string");
         } else if (path[0] !== "/" && !(path.startsWith("http://") || path.startsWith("https://")) && method !== "CONNECT") {
@@ -113709,9 +113709,9 @@ var require_request3 = __commonJS({
         } else if (headers != null) {
           throw new InvalidArgumentError("headers must be an object or an array");
         }
-        assertRequestHandler(handler, method, upgrade);
+        assertRequestHandler(handler2, method, upgrade);
         this.servername = servername || getServerName(this.host) || null;
-        this[kHandler] = handler;
+        this[kHandler] = handler2;
         if (channels.create.hasSubscribers) {
           channels.create.publish({ request: this });
         }
@@ -113938,11 +113938,11 @@ var require_wrap_handler = __commonJS({
     var { InvalidArgumentError } = require_errors2();
     module2.exports = class WrapHandler {
       #handler;
-      constructor(handler) {
-        this.#handler = handler;
+      constructor(handler2) {
+        this.#handler = handler2;
       }
-      static wrap(handler) {
-        return handler.onRequestStart ? handler : new WrapHandler(handler);
+      static wrap(handler2) {
+        return handler2.onRequestStart ? handler2 : new WrapHandler(handler2);
       }
       // Unwrap Interface
       onConnect(abort, context) {
@@ -114020,7 +114020,7 @@ var require_dispatcher = __commonJS({
     "use strict";
     var EventEmitter = require("node:events");
     var WrapHandler = require_wrap_handler();
-    var wrapInterceptor = (dispatch) => (opts, handler) => dispatch(opts, WrapHandler.wrap(handler));
+    var wrapInterceptor = (dispatch) => (opts, handler2) => dispatch(opts, WrapHandler.wrap(handler2));
     var Dispatcher = class extends EventEmitter {
       dispatch() {
         throw new Error("not implemented");
@@ -114103,11 +114103,11 @@ var require_unwrap_handler = __commonJS({
     module2.exports = class UnwrapHandler {
       #handler;
       #controller;
-      constructor(handler) {
-        this.#handler = handler;
+      constructor(handler2) {
+        this.#handler = handler2;
       }
-      static unwrap(handler) {
-        return !handler.onRequestStart ? handler : new UnwrapHandler(handler);
+      static unwrap(handler2) {
+        return !handler2.onRequestStart ? handler2 : new UnwrapHandler(handler2);
       }
       onConnect(abort, context) {
         this.#controller = new UnwrapController(abort);
@@ -114278,11 +114278,11 @@ var require_dispatcher_base = __commonJS({
         };
         this[kDestroy](err).then(() => queueMicrotask(onDestroyed));
       }
-      dispatch(opts, handler) {
-        if (!handler || typeof handler !== "object") {
+      dispatch(opts, handler2) {
+        if (!handler2 || typeof handler2 !== "object") {
           throw new InvalidArgumentError("handler must be an object");
         }
-        handler = UnwrapHandler.unwrap(handler);
+        handler2 = UnwrapHandler.unwrap(handler2);
         try {
           if (!opts || typeof opts !== "object") {
             throw new InvalidArgumentError("opts must be an object.");
@@ -114293,12 +114293,12 @@ var require_dispatcher_base = __commonJS({
           if (this[kClosed]) {
             throw new ClientClosedError();
           }
-          return this[kDispatch](opts, handler);
+          return this[kDispatch](opts, handler2);
         } catch (err) {
-          if (typeof handler.onError !== "function") {
+          if (typeof handler2.onError !== "function") {
             throw err;
           }
-          handler.onError(err);
+          handler2.onError(err);
           return false;
         }
       }
@@ -120376,8 +120376,8 @@ var require_client = __commonJS({
         connect(this);
         this.once("connect", cb);
       }
-      [kDispatch](opts, handler) {
-        const request = new Request(this[kUrl].origin, opts, handler);
+      [kDispatch](opts, handler2) {
+        const request = new Request(this[kUrl].origin, opts, handler2);
         this[kQueue].push(request);
         if (this[kResuming]) {
         } else if (util2.bodyLength(request.body) == null && util2.isIterable(request.body)) {
@@ -120840,13 +120840,13 @@ var require_pool_base = __commonJS({
         }
         return Promise.all(destroyAll);
       }
-      [kDispatch](opts, handler) {
+      [kDispatch](opts, handler2) {
         const dispatcher = this[kGetDispatcher]();
         if (!dispatcher) {
           this[kNeedDrain] = true;
-          this[kQueue].push({ opts, handler });
+          this[kQueue].push({ opts, handler: handler2 });
           this[kQueued]++;
-        } else if (!dispatcher.dispatch(opts, handler)) {
+        } else if (!dispatcher.dispatch(opts, handler2)) {
           dispatcher[kNeedDrain] = true;
           this[kNeedDrain] = !this[kGetDispatcher]();
         }
@@ -121316,7 +121316,7 @@ var require_agent2 = __commonJS({
         }
         return ret;
       }
-      [kDispatch](opts, handler) {
+      [kDispatch](opts, handler2) {
         let key;
         if (opts.origin && (typeof opts.origin === "string" || opts.origin instanceof URL)) {
           key = String(opts.origin);
@@ -121358,7 +121358,7 @@ var require_agent2 = __commonJS({
           this[kClients].set(key, { count: 0, dispatcher });
           this[kOrigins].add(key);
         }
-        return dispatcher.dispatch(opts, handler);
+        return dispatcher.dispatch(opts, handler2);
       }
       [kClose]() {
         const closePromises = [];
@@ -122010,7 +122010,7 @@ var require_socks5_proxy_agent = __commonJS({
       /**
        * Dispatch a request through the SOCKS5 proxy
        */
-      [kDispatch](opts, handler) {
+      [kDispatch](opts, handler2) {
         const { origin } = opts;
         debug("dispatching request to", origin, "via SOCKS5");
         try {
@@ -122052,14 +122052,14 @@ var require_socks5_proxy_agent = __commonJS({
             });
             this[kPools].set(originKey, pool);
           }
-          return pool[kDispatch](opts, handler);
+          return pool[kDispatch](opts, handler2);
         } catch (err) {
           debug("dispatch error:", err);
-          if (typeof handler.onResponseError === "function") {
-            handler.onResponseError(null, err);
+          if (typeof handler2.onResponseError === "function") {
+            handler2.onResponseError(null, err);
             return false;
-          } else if (typeof handler.onError === "function") {
-            handler.onError(err);
+          } else if (typeof handler2.onError === "function") {
+            handler2.onError(err);
             return false;
           } else {
             throw err;
@@ -122135,12 +122135,12 @@ var require_proxy_agent = __commonJS({
           this.#client = new Client(proxyUrl, { connect });
         }
       }
-      [kDispatch](opts, handler) {
-        const onHeaders = handler.onHeaders;
-        handler.onHeaders = function(statusCode, data, resume) {
+      [kDispatch](opts, handler2) {
+        const onHeaders = handler2.onHeaders;
+        handler2.onHeaders = function(statusCode, data, resume) {
           if (statusCode === 407) {
-            if (typeof handler.onError === "function") {
-              handler.onError(new InvalidArgumentError("Proxy Authentication Required (407)"));
+            if (typeof handler2.onError === "function") {
+              handler2.onError(new InvalidArgumentError("Proxy Authentication Required (407)"));
             }
             return;
           }
@@ -122157,7 +122157,7 @@ var require_proxy_agent = __commonJS({
           headers.host = host;
         }
         opts.headers = { ...this[kProxyHeaders], ...headers };
-        return this.#client[kDispatch](opts, handler);
+        return this.#client[kDispatch](opts, handler2);
       }
       [kClose]() {
         return this.#client.close();
@@ -122281,7 +122281,7 @@ var require_proxy_agent = __commonJS({
           }
         });
       }
-      dispatch(opts, handler) {
+      dispatch(opts, handler2) {
         const headers = buildHeaders(opts.headers);
         throwIfProxyAuthIsSent(headers);
         if (headers && !("host" in headers) && !("Host" in headers)) {
@@ -122293,7 +122293,7 @@ var require_proxy_agent = __commonJS({
             ...opts,
             headers
           },
-          handler
+          handler2
         );
       }
       /**
@@ -122379,10 +122379,10 @@ var require_env_http_proxy_agent = __commonJS({
         }
         this.#parseNoProxy();
       }
-      [kDispatch](opts, handler) {
+      [kDispatch](opts, handler2) {
         const url = new URL(opts.origin);
         const agent = this.#getProxyAgentForUrl(url);
-        return agent.dispatch(opts, handler);
+        return agent.dispatch(opts, handler2);
       }
       [kClose]() {
         return Promise.all([
@@ -122551,7 +122551,7 @@ var require_retry_handler = __commonJS({
       }
     };
     var RetryHandler = class _RetryHandler {
-      constructor(opts, { dispatch, handler }) {
+      constructor(opts, { dispatch, handler: handler2 }) {
         const { retryOptions, ...dispatchOpts } = opts;
         const {
           // Retry scoped
@@ -122569,7 +122569,7 @@ var require_retry_handler = __commonJS({
         } = retryOptions ?? {};
         this.error = null;
         this.dispatch = dispatch;
-        this.handler = WrapHandler.wrap(handler);
+        this.handler = WrapHandler.wrap(handler2);
         this.opts = { ...dispatchOpts, body: wrapRequestBody(opts.body) };
         this.retryOpts = {
           throwOnError: throwOnError ?? true,
@@ -122886,13 +122886,13 @@ var require_retry_agent = __commonJS({
         this.#agent = agent;
         this.#options = options;
       }
-      dispatch(opts, handler) {
+      dispatch(opts, handler2) {
         const retry = new RetryHandler({
           ...opts,
           retryOptions: this.#options
         }, {
           dispatch: this.#agent.dispatch.bind(this.#agent),
-          handler
+          handler: handler2
         });
         return this.#agent.dispatch(opts, retry);
       }
@@ -123515,8 +123515,8 @@ var require_api_request = __commonJS({
         });
       }
       try {
-        const handler = new RequestHandler(opts, callback);
-        this.dispatch(opts, handler);
+        const handler2 = new RequestHandler(opts, callback);
+        this.dispatch(opts, handler2);
       } catch (err) {
         if (typeof callback !== "function") {
           throw err;
@@ -123729,8 +123729,8 @@ var require_api_stream = __commonJS({
         });
       }
       try {
-        const handler = new StreamHandler(opts, factory, callback);
-        this.dispatch(opts, handler);
+        const handler2 = new StreamHandler(opts, factory, callback);
+        this.dispatch(opts, handler2);
       } catch (err) {
         if (typeof callback !== "function") {
           throw err;
@@ -123797,11 +123797,11 @@ var require_api_pipeline = __commonJS({
       }
     };
     var PipelineHandler = class extends AsyncResource {
-      constructor(opts, handler) {
+      constructor(opts, handler2) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
         }
-        if (typeof handler !== "function") {
+        if (typeof handler2 !== "function") {
           throw new InvalidArgumentError("invalid handler");
         }
         const { signal, method, opaque, onInfo, responseHeaders } = opts;
@@ -123817,7 +123817,7 @@ var require_api_pipeline = __commonJS({
         super("UNDICI_PIPELINE");
         this.opaque = opaque || null;
         this.responseHeaders = responseHeaders || null;
-        this.handler = handler;
+        this.handler = handler2;
         this.abort = null;
         this.context = null;
         this.onInfo = onInfo || null;
@@ -123871,7 +123871,7 @@ var require_api_pipeline = __commonJS({
         this.context = context;
       }
       onHeaders(statusCode, rawHeaders, resume) {
-        const { opaque, handler, context } = this;
+        const { opaque, handler: handler2, context } = this;
         if (statusCode < 200) {
           if (this.onInfo) {
             const headers = this.responseHeaders === "raw" ? util2.parseRawHeaders(rawHeaders) : util2.parseHeaders(rawHeaders);
@@ -123884,7 +123884,7 @@ var require_api_pipeline = __commonJS({
         try {
           this.handler = null;
           const headers = this.responseHeaders === "raw" ? util2.parseRawHeaders(rawHeaders) : util2.parseHeaders(rawHeaders);
-          body = this.runInAsyncScope(handler, null, {
+          body = this.runInAsyncScope(handler2, null, {
             statusCode,
             headers,
             opaque,
@@ -123931,9 +123931,9 @@ var require_api_pipeline = __commonJS({
         util2.destroy(ret, err);
       }
     };
-    function pipeline(opts, handler) {
+    function pipeline(opts, handler2) {
       try {
-        const pipelineHandler = new PipelineHandler(opts, handler);
+        const pipelineHandler = new PipelineHandler(opts, handler2);
         this.dispatch({ ...opts, body: pipelineHandler.req }, pipelineHandler);
         return pipelineHandler.ret;
       } catch (err) {
@@ -124435,7 +124435,7 @@ var require_mock_utils = __commonJS({
       }
       return Buffer.concat(buffers).toString("utf8");
     }
-    function mockDispatch(opts, handler) {
+    function mockDispatch(opts, handler2) {
       const key = buildKey(opts);
       const mockDispatch2 = getMockDispatch(this[kDispatches], key);
       mockDispatch2.timesInvoked++;
@@ -124448,7 +124448,7 @@ var require_mock_utils = __commonJS({
       mockDispatch2.pending = timesInvoked < times;
       if (error !== null) {
         deleteMockDispatch(this[kDispatches], key);
-        handler.onError(error);
+        handler2.onError(error);
         return true;
       }
       let aborted = false;
@@ -124462,9 +124462,9 @@ var require_mock_utils = __commonJS({
           clearTimeout(timer);
           timer = null;
         }
-        handler.onError(err);
+        handler2.onError(err);
       }
-      handler.onConnect?.(abort, null);
+      handler2.onConnect?.(abort, null);
       if (typeof delay === "number" && delay > 0) {
         timer = setTimeout(() => {
           timer = null;
@@ -124488,9 +124488,9 @@ var require_mock_utils = __commonJS({
         const responseData = getResponseData(body);
         const responseHeaders = generateKeyValues(headers);
         const responseTrailers = generateKeyValues(trailers);
-        handler.onHeaders?.(statusCode, responseHeaders, resume, getStatusText(statusCode));
-        handler.onData?.(Buffer.from(responseData));
-        handler.onComplete?.(responseTrailers);
+        handler2.onHeaders?.(statusCode, responseHeaders, resume, getStatusText(statusCode));
+        handler2.onData?.(Buffer.from(responseData));
+        handler2.onComplete?.(responseTrailers);
         deleteMockDispatch(mockDispatches, key);
       }
       function resume() {
@@ -124501,10 +124501,10 @@ var require_mock_utils = __commonJS({
       const agent = this[kMockAgent];
       const origin = this[kOrigin];
       const originalDispatch = this[kOriginalDispatch];
-      return function dispatch(opts, handler) {
+      return function dispatch(opts, handler2) {
         if (agent.isMockActive) {
           try {
-            mockDispatch.call(this, opts, handler);
+            mockDispatch.call(this, opts, handler2);
           } catch (error) {
             if (error.code === "UND_MOCK_ERR_MOCK_NOT_MATCHED") {
               const netConnect = agent[kGetNetConnect]();
@@ -124515,7 +124515,7 @@ var require_mock_utils = __commonJS({
                 throw new MockNotMatchedError(`${error.message}: subsequent request to origin ${origin} was not allowed (net.connect disabled)${interceptsMessage}`);
               }
               if (checkNetConnect(netConnect, origin)) {
-                originalDispatch.call(this, opts, handler);
+                originalDispatch.call(this, opts, handler2);
               } else {
                 throw new MockNotMatchedError(`${error.message}: subsequent request to origin ${origin} was not allowed (net.connect is not enabled for this origin)${interceptsMessage}`);
               }
@@ -124524,7 +124524,7 @@ var require_mock_utils = __commonJS({
             }
           }
         } else {
-          originalDispatch.call(this, opts, handler);
+          originalDispatch.call(this, opts, handler2);
         }
       };
     }
@@ -124812,13 +124812,13 @@ var require_mock_call_history = __commonJS({
     "use strict";
     var { kMockCallHistoryAddLog } = require_mock_symbols();
     var { InvalidArgumentError } = require_errors2();
-    function handleFilterCallsWithOptions(criteria, options, handler, store, allLogs) {
+    function handleFilterCallsWithOptions(criteria, options, handler2, store, allLogs) {
       switch (options.operator) {
         case "OR":
-          store.push(...handler(criteria, allLogs));
+          store.push(...handler2(criteria, allLogs));
           return store;
         case "AND":
-          return handler(criteria, store);
+          return handler2(criteria, store);
         default:
           throw new InvalidArgumentError("options.operator must to be a case insensitive string equal to 'OR' or 'AND'");
       }
@@ -125169,7 +125169,7 @@ var require_mock_agent = __commonJS({
         }
         return dispatcher;
       }
-      dispatch(opts, handler) {
+      dispatch(opts, handler2) {
         opts.origin = normalizeOrigin(opts.origin);
         this.get(opts.origin);
         this[kMockAgentAddCallHistoryLog](opts);
@@ -125180,7 +125180,7 @@ var require_mock_agent = __commonJS({
           const normalizedSearchParams = normalizeSearchParams(searchParams, acceptNonStandardSearchParameters);
           dispatchOpts.path = `${path}?${normalizedSearchParams}`;
         }
-        return this[kAgent].dispatch(dispatchOpts, handler);
+        return this[kAgent].dispatch(dispatchOpts, handler2);
       }
       async close() {
         this.clearCallHistory();
@@ -125816,44 +125816,44 @@ var require_snapshot_agent = __commonJS({
           });
         }
       }
-      dispatch(opts, handler) {
-        handler = WrapHandler.wrap(handler);
+      dispatch(opts, handler2) {
+        handler2 = WrapHandler.wrap(handler2);
         const mode = this[kSnapshotMode];
         if (this[kSnapshotRecorder].isUrlExcluded(opts)) {
-          return this[kRealAgent].dispatch(opts, handler);
+          return this[kRealAgent].dispatch(opts, handler2);
         }
         if (mode === "playback" || mode === "update") {
           if (!this[kSnapshotLoaded]) {
-            return this.#asyncDispatch(opts, handler);
+            return this.#asyncDispatch(opts, handler2);
           }
           const snapshot = this[kSnapshotRecorder].findSnapshot(opts);
           if (snapshot) {
-            return this.#replaySnapshot(snapshot, handler);
+            return this.#replaySnapshot(snapshot, handler2);
           } else if (mode === "update") {
-            return this.#recordAndReplay(opts, handler);
+            return this.#recordAndReplay(opts, handler2);
           } else {
             const error = new UndiciError(`No snapshot found for ${opts.method || "GET"} ${opts.path}`);
-            if (handler.onError) {
-              handler.onError(error);
+            if (handler2.onError) {
+              handler2.onError(error);
               return;
             }
             throw error;
           }
         } else if (mode === "record") {
-          return this.#recordAndReplay(opts, handler);
+          return this.#recordAndReplay(opts, handler2);
         }
       }
       /**
        * Async version of dispatch for when we need to load snapshots first
        */
-      async #asyncDispatch(opts, handler) {
+      async #asyncDispatch(opts, handler2) {
         await this.loadSnapshots();
-        return this.dispatch(opts, handler);
+        return this.dispatch(opts, handler2);
       }
       /**
        * Records a real request and replays the response
        */
-      #recordAndReplay(opts, handler) {
+      #recordAndReplay(opts, handler2) {
         const responseData = {
           statusCode: null,
           headers: {},
@@ -125863,19 +125863,19 @@ var require_snapshot_agent = __commonJS({
         const self2 = this;
         const recordingHandler = {
           onRequestStart(controller, context) {
-            return handler.onRequestStart(controller, { ...context, history: this.history });
+            return handler2.onRequestStart(controller, { ...context, history: this.history });
           },
           onRequestUpgrade(controller, statusCode, headers, socket) {
-            return handler.onRequestUpgrade(controller, statusCode, headers, socket);
+            return handler2.onRequestUpgrade(controller, statusCode, headers, socket);
           },
           onResponseStart(controller, statusCode, headers, statusMessage) {
             responseData.statusCode = statusCode;
             responseData.headers = headers;
-            return handler.onResponseStart(controller, statusCode, headers, statusMessage);
+            return handler2.onResponseStart(controller, statusCode, headers, statusMessage);
           },
           onResponseData(controller, chunk) {
             responseData.body.push(chunk);
-            return handler.onResponseData(controller, chunk);
+            return handler2.onResponseData(controller, chunk);
           },
           onResponseEnd(controller, trailers) {
             responseData.trailers = trailers;
@@ -125885,7 +125885,7 @@ var require_snapshot_agent = __commonJS({
               headers: responseData.headers,
               body: responseBody,
               trailers: responseData.trailers
-            }).then(() => handler.onResponseEnd(controller, trailers)).catch((error) => handler.onResponseError(controller, error));
+            }).then(() => handler2.onResponseEnd(controller, trailers)).catch((error) => handler2.onResponseError(controller, error));
           }
         };
         const agent = this[kRealAgent];
@@ -125898,7 +125898,7 @@ var require_snapshot_agent = __commonJS({
        * @param {Object} handler - The handler to call with the response data.
        * @returns {void}
        */
-      #replaySnapshot(snapshot, handler) {
+      #replaySnapshot(snapshot, handler2) {
         try {
           const { response } = snapshot;
           const controller = {
@@ -125913,13 +125913,13 @@ var require_snapshot_agent = __commonJS({
             aborted: false,
             paused: false
           };
-          handler.onRequestStart(controller);
-          handler.onResponseStart(controller, response.statusCode, response.headers);
+          handler2.onRequestStart(controller);
+          handler2.onResponseStart(controller, response.statusCode, response.headers);
           const body = Buffer.from(response.body, "base64");
-          handler.onResponseData(controller, body);
-          handler.onResponseEnd(controller, response.trailers);
+          handler2.onResponseData(controller, body);
+          handler2.onResponseEnd(controller, response.trailers);
         } catch (error) {
-          handler.onError?.(error);
+          handler2.onError?.(error);
         }
       }
       /**
@@ -126106,11 +126106,11 @@ var require_decorator_handler = __commonJS({
       #onCompleteCalled = false;
       #onErrorCalled = false;
       #onResponseStartCalled = false;
-      constructor(handler) {
-        if (typeof handler !== "object" || handler === null) {
+      constructor(handler2) {
+        if (typeof handler2 !== "object" || handler2 === null) {
           throw new TypeError("handler must be an object");
         }
-        this.#handler = WrapHandler.wrap(handler);
+        this.#handler = WrapHandler.wrap(handler2);
       }
       onRequestStart(...args) {
         this.#handler.onRequestStart?.(...args);
@@ -126183,7 +126183,7 @@ var require_redirect_handler = __commonJS({
         const dispatch = dispatcher.dispatch.bind(dispatcher);
         return (opts, originalHandler) => dispatch(opts, new _RedirectHandler(dispatch, maxRedirections, opts, originalHandler));
       }
-      constructor(dispatch, maxRedirections, opts, handler) {
+      constructor(dispatch, maxRedirections, opts, handler2) {
         if (maxRedirections != null && (!Number.isInteger(maxRedirections) || maxRedirections < 0)) {
           throw new InvalidArgumentError("maxRedirections must be a positive number");
         }
@@ -126192,7 +126192,7 @@ var require_redirect_handler = __commonJS({
         const { maxRedirections: _, ...cleanOpts } = opts;
         this.opts = cleanOpts;
         this.maxRedirections = maxRedirections;
-        this.handler = handler;
+        this.handler = handler2;
         this.history = [];
         Object.defineProperty(this.history, kRedirectCacheControl, {
           value: [],
@@ -126335,13 +126335,13 @@ var require_redirect = __commonJS({
     var RedirectHandler = require_redirect_handler();
     function createRedirectInterceptor({ maxRedirections: defaultMaxRedirections } = {}) {
       return (dispatch) => {
-        return function Intercept(opts, handler) {
+        return function Intercept(opts, handler2) {
           const { maxRedirections = defaultMaxRedirections, ...rest } = opts;
           if (maxRedirections == null || maxRedirections === 0) {
-            return dispatch(opts, handler);
+            return dispatch(opts, handler2);
           }
           const dispatchOpts = { ...rest };
-          const redirectHandler = new RedirectHandler(dispatch, maxRedirections, dispatchOpts, handler);
+          const redirectHandler = new RedirectHandler(dispatch, maxRedirections, dispatchOpts, handler2);
           return dispatch(dispatchOpts, redirectHandler);
         };
       };
@@ -126362,8 +126362,8 @@ var require_response_error = __commonJS({
       #decoder;
       #headers;
       #body;
-      constructor(_opts, { handler }) {
-        super(handler);
+      constructor(_opts, { handler: handler2 }) {
+        super(handler2);
       }
       #checkContentType(contentType) {
         return (this.#contentType ?? "").indexOf(contentType) === 0;
@@ -126424,8 +126424,8 @@ var require_response_error = __commonJS({
     };
     module2.exports = () => {
       return (dispatch) => {
-        return function Intercept(opts, handler) {
-          return dispatch(opts, new ResponseErrorHandler(opts, { handler }));
+        return function Intercept(opts, handler2) {
+          return dispatch(opts, new ResponseErrorHandler(opts, { handler: handler2 }));
         };
       };
     };
@@ -126439,13 +126439,13 @@ var require_retry2 = __commonJS({
     var RetryHandler = require_retry_handler();
     module2.exports = (globalOpts) => {
       return (dispatch) => {
-        return function retryInterceptor(opts, handler) {
+        return function retryInterceptor(opts, handler2) {
           return dispatch(
             opts,
             new RetryHandler(
               { ...opts, retryOptions: { ...globalOpts, ...opts.retryOptions } },
               {
-                handler,
+                handler: handler2,
                 dispatch
               }
             )
@@ -126468,11 +126468,11 @@ var require_dump = __commonJS({
       #size = 0;
       aborted = false;
       reason = false;
-      constructor({ maxSize, signal }, handler) {
+      constructor({ maxSize, signal }, handler2) {
         if (maxSize != null && (!Number.isFinite(maxSize) || maxSize < 1)) {
           throw new InvalidArgumentError("maxSize must be a number greater than 0");
         }
-        super(handler);
+        super(handler2);
         this.#maxSize = maxSize ?? this.#maxSize;
       }
       #abort(reason) {
@@ -126522,9 +126522,9 @@ var require_dump = __commonJS({
       maxSize: 1024 * 1024
     }) {
       return (dispatch) => {
-        return function Intercept(opts, handler) {
+        return function Intercept(opts, handler2) {
           const { dumpMaxSize = defaultMaxSize } = opts;
-          const dumpHandler = new DumpHandler({ maxSize: dumpMaxSize, signal: opts.signal }, handler);
+          const dumpHandler = new DumpHandler({ maxSize: dumpMaxSize, signal: opts.signal }, handler2);
           return dispatch(opts, dumpHandler);
         };
       };
@@ -126845,8 +126845,8 @@ var require_dns = __commonJS({
       #controller = null;
       #newOrigin = null;
       #firstTry = true;
-      constructor(state, { origin, handler, dispatch, newOrigin }, opts) {
-        super(handler);
+      constructor(state, { origin, handler: handler2, dispatch, newOrigin }, opts) {
+        super(handler2);
         this.#origin = origin;
         this.#newOrigin = newOrigin;
         this.#opts = { ...opts };
@@ -126941,14 +126941,14 @@ var require_dns = __commonJS({
       };
       const instance = new DNSInstance(opts);
       return (dispatch) => {
-        return function dnsInterceptor(origDispatchOpts, handler) {
+        return function dnsInterceptor(origDispatchOpts, handler2) {
           const origin = origDispatchOpts.origin.constructor === URL ? origDispatchOpts.origin : new URL(origDispatchOpts.origin);
           if (isIP(origin.hostname) !== 0) {
-            return dispatch(origDispatchOpts, handler);
+            return dispatch(origDispatchOpts, handler2);
           }
           instance.runLookup(origin, origDispatchOpts, (err, newOrigin) => {
             if (err) {
-              return handler.onResponseError(null, err);
+              return handler2.onResponseError(null, err);
             }
             const dispatchOpts = {
               ...origDispatchOpts,
@@ -126960,7 +126960,7 @@ var require_dns = __commonJS({
             dispatch(
               dispatchOpts,
               instance.getHandler(
-                { origin, dispatch, handler, newOrigin },
+                { origin, dispatch, handler: handler2, newOrigin },
                 origDispatchOpts
               )
             );
@@ -128158,12 +128158,12 @@ var require_cache_handler = __commonJS({
        * @param {import('../../types/cache-interceptor.d.ts').default.CacheKey} cacheKey
        * @param {import('../../types/dispatcher.d.ts').default.DispatchHandler} handler
        */
-      constructor({ store, type, cacheByDefault }, cacheKey, handler) {
+      constructor({ store, type, cacheByDefault }, cacheKey, handler2) {
         this.#store = store;
         this.#cacheType = type;
         this.#cacheByDefault = cacheByDefault;
         this.#cacheKey = cacheKey;
-        this.#handler = handler;
+        this.#handler = handler2;
       }
       onRequestStart(controller, context) {
         this.#writeStream?.destroy();
@@ -128190,7 +128190,7 @@ var require_cache_handler = __commonJS({
           resHeaders,
           statusMessage
         );
-        const handler = this;
+        const handler2 = this;
         if (!arrayIncludes(util2.safeHTTPMethods, this.#cacheKey.method) && statusCode >= 200 && statusCode <= 399) {
           invalidateUnsafeRequest(this.#store, this.#cacheKey, resHeaders);
           return downstreamOnHeaders();
@@ -128377,14 +128377,14 @@ var require_cache_handler = __commonJS({
                 }
               };
               this.#writeStream.on("error", function() {
-                handler.#writeStream = void 0;
-                handler.#store.delete(handler.#cacheKey);
+                handler2.#writeStream = void 0;
+                handler2.#store.delete(handler2.#cacheKey);
                 streamCachedBody();
               }).on("drain", () => {
                 streamCachedBody();
               }).on("close", function() {
-                if (handler.#writeStream === this) {
-                  handler.#writeStream = void 0;
+                if (handler2.#writeStream === this) {
+                  handler2.#writeStream = void 0;
                   streamCachedBody();
                 }
               });
@@ -128407,11 +128407,11 @@ var require_cache_handler = __commonJS({
                 finish304();
               });
               this.#writeStream.on("error", function() {
-                handler.#writeStream = void 0;
-                handler.#store.delete(handler.#cacheKey);
+                handler2.#writeStream = void 0;
+                handler2.#store.delete(handler2.#cacheKey);
               }).on("close", function() {
-                if (handler.#writeStream === this) {
-                  handler.#writeStream = void 0;
+                if (handler2.#writeStream === this) {
+                  handler2.#writeStream = void 0;
                 }
               });
             } else {
@@ -128435,11 +128435,11 @@ var require_cache_handler = __commonJS({
             return downstreamOnHeaders();
           }
           this.#writeStream.on("drain", () => controller.resume()).on("error", function() {
-            handler.#writeStream = void 0;
-            handler.#store.delete(handler.#cacheKey);
+            handler2.#writeStream = void 0;
+            handler2.#store.delete(handler2.#cacheKey);
           }).on("close", function() {
-            if (handler.#writeStream === this) {
-              handler.#writeStream = void 0;
+            if (handler2.#writeStream === this) {
+              handler2.#writeStream = void 0;
             }
             controller.resume();
           });
@@ -128969,12 +128969,12 @@ var require_cache_revalidation_handler = __commonJS({
        * @param {import('../../types/dispatcher.d.ts').default.DispatchHandlers} handler
        * @param {boolean} allowErrorStatusCodes
        */
-      constructor(callback, handler, allowErrorStatusCodes) {
+      constructor(callback, handler2, allowErrorStatusCodes) {
         if (typeof callback !== "function") {
           throw new TypeError("callback must be a function");
         }
         this.#callback = callback;
-        this.#handler = handler;
+        this.#handler = handler2;
         this.#allowErrorStatusCodes = allowErrorStatusCodes;
       }
       onRequestStart(_, context) {
@@ -129222,37 +129222,37 @@ var require_cache2 = __commonJS({
       const staleWhileRevalidateExpiry = result.staleAt + staleWhileRevalidate * 1e3;
       return now <= staleWhileRevalidateExpiry;
     }
-    function handleUncachedResponse(dispatch, globalOpts, cacheKey, handler, opts, reqCacheControl) {
+    function handleUncachedResponse(dispatch, globalOpts, cacheKey, handler2, opts, reqCacheControl) {
       if (reqCacheControl?.["only-if-cached"]) {
         let aborted = false;
         try {
-          if (typeof handler.onConnect === "function") {
-            handler.onConnect(() => {
+          if (typeof handler2.onConnect === "function") {
+            handler2.onConnect(() => {
               aborted = true;
             });
             if (aborted) {
               return;
             }
           }
-          if (typeof handler.onHeaders === "function") {
-            handler.onHeaders(504, [], nop, "Gateway Timeout");
+          if (typeof handler2.onHeaders === "function") {
+            handler2.onHeaders(504, [], nop, "Gateway Timeout");
             if (aborted) {
               return;
             }
           }
-          if (typeof handler.onComplete === "function") {
-            handler.onComplete([]);
+          if (typeof handler2.onComplete === "function") {
+            handler2.onComplete([]);
           }
         } catch (err) {
-          if (typeof handler.onError === "function") {
-            handler.onError(err);
+          if (typeof handler2.onError === "function") {
+            handler2.onError(err);
           }
         }
         return true;
       }
-      return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler));
+      return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler2));
     }
-    function sendCachedValue(handler, opts, result, age, context, isStale2) {
+    function sendCachedValue(handler2, opts, result, age, context, isStale2) {
       const stream = util2.isStream(result.body) ? result.body : Readable.from(result.body ?? []);
       assert(!stream.destroyed, "stream should not be destroyed");
       assert(!stream.readableDidRead, "stream should not be readableDidRead");
@@ -129278,19 +129278,19 @@ var require_cache2 = __commonJS({
       };
       stream.on("error", function(err) {
         if (!this.readableEnded) {
-          handler.onResponseError?.(controller, err);
+          handler2.onResponseError?.(controller, err);
         }
       }).on("close", function() {
         if (!this.errored) {
           try {
-            handler.onResponseEnd?.(controller, {});
+            handler2.onResponseEnd?.(controller, {});
           } catch (err) {
-            handler.onResponseError?.(controller, err);
+            handler2.onResponseError?.(controller, err);
           }
         }
       });
       try {
-        handler.onRequestStart?.(controller, context);
+        handler2.onRequestStart?.(controller, context);
       } catch (err) {
         stream.destroy(err);
         return;
@@ -129304,7 +129304,7 @@ var require_cache2 = __commonJS({
       }
       controller.rawHeaders = util2.toRawHeaders(headers);
       try {
-        handler.onResponseStart?.(controller, result.statusCode, headers, result.statusMessage);
+        handler2.onResponseStart?.(controller, result.statusCode, headers, result.statusMessage);
       } catch (err) {
         stream.destroy(err);
         return;
@@ -129314,27 +129314,27 @@ var require_cache2 = __commonJS({
       } else {
         stream.on("data", function(chunk) {
           try {
-            handler.onResponseData?.(controller, chunk);
+            handler2.onResponseData?.(controller, chunk);
           } catch (err) {
             stream.destroy(err);
           }
         });
       }
     }
-    function handleResult(dispatch, globalOpts, cacheKey, handler, opts, reqCacheControl, result) {
+    function handleResult(dispatch, globalOpts, cacheKey, handler2, opts, reqCacheControl, result) {
       if (!result) {
-        return handleUncachedResponse(dispatch, globalOpts, cacheKey, handler, opts, reqCacheControl);
+        return handleUncachedResponse(dispatch, globalOpts, cacheKey, handler2, opts, reqCacheControl);
       }
       if (globalOpts.type === "shared" && Object.hasOwn(result.headers, "set-cookie")) {
         if (util2.isStream(result.body)) {
           result.body.on("error", nop).destroy();
         }
         deleteCachedValue(globalOpts.store, cacheKey);
-        return handleUncachedResponse(dispatch, globalOpts, cacheKey, handler, opts, reqCacheControl);
+        return handleUncachedResponse(dispatch, globalOpts, cacheKey, handler2, opts, reqCacheControl);
       }
       const now = Date.now();
       if (now > result.deleteAt) {
-        return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler));
+        return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler2));
       }
       const age = Math.round((now - result.cachedAt) / 1e3);
       const requestMaxAgeExpired = reqCacheControl?.["max-age"] !== void 0 && age >= reqCacheControl["max-age"];
@@ -129342,10 +129342,10 @@ var require_cache2 = __commonJS({
       const revalidate = requestMaxAgeExpired || needsRevalidation(result, reqCacheControl, opts);
       if (stale || revalidate) {
         if (util2.isStream(opts.body) && util2.bodyLength(opts.body) !== 0) {
-          return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler));
+          return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler2));
         }
         if (!revalidate && withinStaleWhileRevalidateWindow(result, globalOpts.type)) {
-          sendCachedValue(handler, opts, result, age, null, true);
+          sendCachedValue(handler2, opts, result, age, null, true);
           queueMicrotask(() => {
             const headers2 = makeRevalidationHeaders(opts, result);
             dispatch(
@@ -129385,7 +129385,7 @@ var require_cache2 = __commonJS({
             result.body.on("error", nop).destroy();
           }
           deleteCachedValue(globalOpts.store, cacheKey);
-          return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler));
+          return dispatch(opts, new CacheHandler(globalOpts, cacheKey, handler2));
         };
         return dispatch(
           {
@@ -129405,12 +129405,12 @@ var require_cache2 = __commonJS({
                     return refetch();
                   }
                 }
-                sendCachedValue(handler, opts, result, age, context, stale);
+                sendCachedValue(handler2, opts, result, age, context, stale);
               } else if (util2.isStream(result.body)) {
                 result.body.on("error", nop).destroy();
               }
             },
-            new CacheHandler(globalOpts, cacheKey, handler),
+            new CacheHandler(globalOpts, cacheKey, handler2),
             withinStaleIfErrorThreshold
           )
         );
@@ -129418,7 +129418,7 @@ var require_cache2 = __commonJS({
       if (util2.isStream(opts.body)) {
         opts.body.on("error", nop).destroy();
       }
-      sendCachedValue(handler, opts, result, age, null, false);
+      sendCachedValue(handler2, opts, result, age, null, false);
     }
     module2.exports = (opts = {}) => {
       const {
@@ -129454,9 +129454,9 @@ var require_cache2 = __commonJS({
         }
       }
       return (dispatch) => {
-        return (opts2, handler) => {
+        return (opts2, handler2) => {
           if (!opts2.origin || arrayIncludes(safeMethodsToNotCache, opts2.method)) {
-            return dispatch(opts2, handler);
+            return dispatch(opts2, handler2);
           }
           if (origins !== void 0) {
             const requestOrigin = opts2.origin.toString().toLowerCase();
@@ -129474,7 +129474,7 @@ var require_cache2 = __commonJS({
               }
             }
             if (!isAllowed) {
-              return dispatch(opts2, handler);
+              return dispatch(opts2, handler2);
             }
           }
           opts2 = {
@@ -129483,11 +129483,11 @@ var require_cache2 = __commonJS({
           };
           const reqCacheControl = opts2.headers?.["cache-control"] ? parseCacheControlHeader(opts2.headers["cache-control"]) : hasPragmaNoCache(opts2.headers) ? { "no-cache": true } : void 0;
           if (reqCacheControl?.["no-store"]) {
-            return dispatch(opts2, handler);
+            return dispatch(opts2, handler2);
           }
           const cacheKey = makeCacheKey(opts2);
           if (!arrayIncludes(util2.safeHTTPMethods, opts2.method)) {
-            return dispatch(opts2, new CacheHandler(globalOpts, cacheKey, handler));
+            return dispatch(opts2, new CacheHandler(globalOpts, cacheKey, handler2));
           }
           const result = store.get(cacheKey);
           if (result && typeof result.then === "function") {
@@ -129495,13 +129495,13 @@ var require_cache2 = __commonJS({
               dispatch,
               globalOpts,
               cacheKey,
-              handler,
+              handler2,
               opts2,
               reqCacheControl,
               result2
             )).catch((err) => {
-              if (typeof handler.onResponseError === "function") {
-                handler.onResponseError({
+              if (typeof handler2.onResponseError === "function") {
+                handler2.onResponseError({
                   rawHeaders: [],
                   rawTrailers: [],
                   pause() {
@@ -129529,7 +129529,7 @@ var require_cache2 = __commonJS({
               dispatch,
               globalOpts,
               cacheKey,
-              handler,
+              handler2,
               opts2,
               reqCacheControl,
               result
@@ -129670,11 +129670,11 @@ var require_decompress = __commonJS({
       #finalDecompressor;
       /** @type {DecompressController} */
       #controller;
-      constructor(handler, { skipStatusCodes = defaultSkipStatusCodes, skipErrorResponses = true, maxSize = defaultMaxSize } = {}) {
+      constructor(handler2, { skipStatusCodes = defaultSkipStatusCodes, skipErrorResponses = true, maxSize = defaultMaxSize } = {}) {
         if (!Number.isSafeInteger(maxSize) || maxSize < 0) {
           throw new InvalidArgumentError("maxSize must be a non-negative integer");
         }
-        super(handler);
+        super(handler2);
         this.#skipStatusCodes = skipStatusCodes;
         this.#skipErrorResponses = skipErrorResponses;
         this.#maxSize = maxSize;
@@ -130008,8 +130008,8 @@ var require_decompress = __commonJS({
         warningEmitted = true;
       }
       return (dispatch) => {
-        return (opts, handler) => {
-          const decompressHandler = new DecompressHandler(handler, options);
+        return (opts, handler2) => {
+          const decompressHandler = new DecompressHandler(handler2, options);
           return dispatch(opts, decompressHandler);
         };
       };
@@ -130102,21 +130102,21 @@ var require_deduplication_handler = __commonJS({
        * @param {DispatchHandler} handler
        * @returns {boolean}
        */
-      addWaitingHandler(handler) {
+      addWaitingHandler(handler2) {
         if (this.#completed || this.#responseDataStarted) {
           return false;
         }
-        const waitingHandler = this.#createWaitingHandler(handler);
+        const waitingHandler = this.#createWaitingHandler(handler2);
         const waitingController = waitingHandler.controller;
         try {
           if (this.#requestStarted) {
-            handler.onRequestStart?.(waitingController, this.#context);
+            handler2.onRequestStart?.(waitingController, this.#context);
             if (waitingController.aborted) {
               waitingHandler.done = true;
               return true;
             }
             if (this.#responseStarted) {
-              handler.onResponseStart?.(
+              handler2.onResponseStart?.(
                 waitingController,
                 this.#statusCode,
                 this.#headers,
@@ -130180,13 +130180,13 @@ var require_deduplication_handler = __commonJS({
         this.#statusMessage = statusMessage;
         this.#primaryHandler.onResponseStart?.(controller, statusCode, headers, statusMessage);
         for (const waitingHandler of this.#waitingHandlers) {
-          const { handler, controller: waitingController } = waitingHandler;
+          const { handler: handler2, controller: waitingController } = waitingHandler;
           if (waitingHandler.done || waitingController.aborted) {
             waitingHandler.done = true;
             continue;
           }
           try {
-            handler.onResponseStart?.(
+            handler2.onResponseStart?.(
               waitingController,
               statusCode,
               headers,
@@ -130211,7 +130211,7 @@ var require_deduplication_handler = __commonJS({
         this.#responseDataStarted = true;
         this.#primaryHandler.onResponseData?.(controller, chunk);
         for (const waitingHandler of this.#waitingHandlers) {
-          const { handler, controller: waitingController } = waitingHandler;
+          const { handler: handler2, controller: waitingController } = waitingHandler;
           if (waitingHandler.done || waitingController.aborted) {
             waitingHandler.done = true;
             continue;
@@ -130221,7 +130221,7 @@ var require_deduplication_handler = __commonJS({
             continue;
           }
           try {
-            handler.onResponseData?.(waitingController, chunk);
+            handler2.onResponseData?.(waitingController, chunk);
           } catch {
           }
           if (waitingController.aborted) {
@@ -130286,9 +130286,9 @@ var require_deduplication_handler = __commonJS({
        * @param {DispatchHandler} handler
        * @returns {WaitingHandler}
        */
-      #createWaitingHandler(handler) {
+      #createWaitingHandler(handler2) {
         const waitingHandler = {
-          handler,
+          handler: handler2,
           controller: null,
           bufferedChunks: [],
           bufferedBytes: 0,
@@ -130366,12 +130366,12 @@ var require_deduplication_handler = __commonJS({
        * @param {WaitingHandler} waitingHandler
        */
       #flushWaitingHandler(waitingHandler) {
-        const { handler, controller } = waitingHandler;
+        const { handler: handler2, controller } = waitingHandler;
         while (!waitingHandler.done && !controller.aborted && !controller.paused && waitingHandler.bufferedChunks.length > 0) {
           const bufferedChunk = waitingHandler.bufferedChunks.shift();
           waitingHandler.bufferedBytes -= bufferedChunk.length;
           try {
-            handler.onResponseData?.(controller, bufferedChunk);
+            handler2.onResponseData?.(controller, bufferedChunk);
           } catch {
           }
           if (controller.aborted) {
@@ -130449,9 +130449,9 @@ var require_deduplicate = __commonJS({
       const excludeHeaderNamesSet = new Set(excludeHeaderNames.map((name) => name.toLowerCase()));
       const pendingRequests = /* @__PURE__ */ new Map();
       return (dispatch) => {
-        return (opts2, handler) => {
+        return (opts2, handler2) => {
           if (!opts2.origin || methods.includes(opts2.method) === false) {
-            return dispatch(opts2, handler);
+            return dispatch(opts2, handler2);
           }
           opts2 = {
             ...opts2,
@@ -130460,7 +130460,7 @@ var require_deduplicate = __commonJS({
           if (skipHeaderNamesSet.size > 0) {
             for (const headerName of Object.keys(opts2.headers)) {
               if (skipHeaderNamesSet.has(headerName.toLowerCase())) {
-                return dispatch(opts2, handler);
+                return dispatch(opts2, handler2);
               }
             }
           }
@@ -130468,13 +130468,13 @@ var require_deduplicate = __commonJS({
           const dedupeKey = makeDeduplicationKey(cacheKey, excludeHeaderNamesSet);
           const pendingHandler = pendingRequests.get(dedupeKey);
           if (pendingHandler) {
-            if (pendingHandler.addWaitingHandler(handler)) {
+            if (pendingHandler.addWaitingHandler(handler2)) {
               return true;
             }
-            return dispatch(opts2, handler);
+            return dispatch(opts2, handler2);
           }
           const deduplicationHandler = new DeduplicationHandler(
-            handler,
+            handler2,
             () => {
               pendingRequests.delete(dedupeKey);
               if (pendingRequestsChannel.hasSubscribers) {
@@ -135313,8 +135313,8 @@ var require_util6 = __commonJS({
       const event = eventFactory(e, eventInitDict);
       target.dispatchEvent(event);
     }
-    function websocketMessageReceived(handler, type, data) {
-      handler.onMessage(type, data);
+    function websocketMessageReceived(handler2, type, data) {
+      handler2.onMessage(type, data);
     }
     function toArrayBuffer(buffer) {
       if (buffer.byteLength === buffer.buffer.byteLength) {
@@ -135586,7 +135586,7 @@ var require_connection = __commonJS({
     var { runtimeFeatures } = require_runtime_features();
     var crypto2 = runtimeFeatures.has("crypto") ? require("node:crypto") : null;
     var warningEmitted = false;
-    function establishWebSocketConnection(url, protocols, client, handler, options) {
+    function establishWebSocketConnection(url, protocols, client, handler2, options) {
       const requestURL = url;
       requestURL.protocol = url.protocol === "ws:" ? "http:" : "https:";
       const request = makeRequest({
@@ -135619,11 +135619,11 @@ var require_connection = __commonJS({
         processResponse(response) {
           if (response.type === "error" || response.status !== 101) {
             if (response.socket?.session == null) {
-              failHandshake(handler, response, 1002, "Received network error or non-101 status code.", response.error);
+              failHandshake(handler2, response, 1002, "Received network error or non-101 status code.", response.error);
               return;
             }
             if (response.status !== 200) {
-              failHandshake(handler, response, 1002, "Received network error or non-200 status code.", response.error);
+              failHandshake(handler2, response, 1002, "Received network error or non-200 status code.", response.error);
               return;
             }
           }
@@ -135632,21 +135632,21 @@ var require_connection = __commonJS({
             warningEmitted = true;
           }
           if (protocols.length !== 0 && !response.headersList.get("Sec-WebSocket-Protocol")) {
-            failHandshake(handler, response, 1002, "Server did not respond with sent protocols.");
+            failHandshake(handler2, response, 1002, "Server did not respond with sent protocols.");
             return;
           }
           if (response.socket.session == null && response.headersList.get("Upgrade")?.toLowerCase() !== "websocket") {
-            failHandshake(handler, response, 1002, 'Server did not set Upgrade header to "websocket".');
+            failHandshake(handler2, response, 1002, 'Server did not set Upgrade header to "websocket".');
             return;
           }
           if (response.socket.session == null && response.headersList.get("Connection")?.toLowerCase() !== "upgrade") {
-            failHandshake(handler, response, 1002, 'Server did not set Connection header to "upgrade".');
+            failHandshake(handler2, response, 1002, 'Server did not set Connection header to "upgrade".');
             return;
           }
           const secWSAccept = response.headersList.get("Sec-WebSocket-Accept");
           const digest = crypto2.hash("sha1", keyValue + uid, "base64");
           if (secWSAccept !== digest) {
-            failHandshake(handler, response, 1002, "Incorrect hash received in Sec-WebSocket-Accept header.");
+            failHandshake(handler2, response, 1002, "Incorrect hash received in Sec-WebSocket-Accept header.");
             return;
           }
           const secExtension = response.headersList.get("Sec-WebSocket-Extensions");
@@ -135654,7 +135654,7 @@ var require_connection = __commonJS({
           if (secExtension !== null) {
             extensions = parseExtensions(secExtension);
             if (!extensions.has("permessage-deflate")) {
-              failHandshake(handler, response, 1002, "Sec-WebSocket-Extensions header does not match.");
+              failHandshake(handler2, response, 1002, "Sec-WebSocket-Extensions header does not match.");
               return;
             }
           }
@@ -135662,15 +135662,15 @@ var require_connection = __commonJS({
           if (secProtocol !== null) {
             const requestProtocols = getDecodeSplit("sec-websocket-protocol", request.headersList);
             if (requestProtocols === null || !requestProtocols.includes(secProtocol)) {
-              failHandshake(handler, response, 1002, "Protocol was not set in the opening handshake.");
+              failHandshake(handler2, response, 1002, "Protocol was not set in the opening handshake.");
               return;
             }
           }
-          response.socket.on("data", handler.onSocketData);
-          response.socket.on("close", handler.onSocketClose);
-          response.socket.on("error", handler.onSocketError);
-          handler.wasEverConnected = true;
-          handler.onConnectionEstablished(response, extensions);
+          response.socket.on("data", handler2.onSocketData);
+          response.socket.on("close", handler2.onSocketClose);
+          response.socket.on("error", handler2.onSocketError);
+          handler2.wasEverConnected = true;
+          handler2.onConnectionEstablished(response, extensions);
         }
       });
       return controller;
@@ -135708,21 +135708,21 @@ var require_connection = __commonJS({
         object.readyState = states.CLOSING;
       }
     }
-    function failHandshake(handler, response, code, reason, cause) {
+    function failHandshake(handler2, response, code, reason, cause) {
       if (response.socket?.session != null && !response.socket.destroyed) {
         response.socket.destroy();
       }
-      failWebsocketConnection(handler, code, reason, cause);
+      failWebsocketConnection(handler2, code, reason, cause);
     }
-    function failWebsocketConnection(handler, code, reason, cause) {
-      if (isEstablished(handler.readyState)) {
-        closeWebSocketConnection(handler, code, reason, false);
+    function failWebsocketConnection(handler2, code, reason, cause) {
+      if (isEstablished(handler2.readyState)) {
+        closeWebSocketConnection(handler2, code, reason, false);
       }
-      handler.controller.abort();
-      if (isConnecting(handler.readyState)) {
-        handler.onSocketClose();
-      } else if (handler.socket?.destroyed === false) {
-        handler.socket.destroy();
+      handler2.controller.abort();
+      if (isConnecting(handler2.readyState)) {
+        handler2.onSocketClose();
+      } else if (handler2.socket?.destroyed === false) {
+        handler2.socket.destroy();
       }
     }
     module2.exports = {
@@ -135856,9 +135856,9 @@ var require_receiver = __commonJS({
        * @param {Map<string, string>|null} extensions
        * @param {{ maxFragments?: number, maxPayloadSize?: number }} [options]
        */
-      constructor(handler, extensions, options = {}) {
+      constructor(handler2, extensions, options = {}) {
         super();
-        this.#handler = handler;
+        this.#handler = handler2;
         this.#extensions = extensions == null ? /* @__PURE__ */ new Map() : extensions;
         this.#maxFragments = options.maxFragments ?? 0;
         this.#maxPayloadSize = options.maxPayloadSize ?? 0;
@@ -137965,9 +137965,9 @@ var require_undici = __commonJS({
       headerNameToString: util2.headerNameToString
     };
     function makeDispatcher(fn) {
-      return (url, opts, handler) => {
+      return (url, opts, handler2) => {
         if (typeof opts === "function") {
-          handler = opts;
+          handler2 = opts;
           opts = null;
         }
         if (!url || typeof url !== "string" && typeof url !== "object" && !(url instanceof URL)) {
@@ -138000,7 +138000,7 @@ var require_undici = __commonJS({
           origin: url.origin,
           path: url.search ? `${url.pathname}${url.search}` : url.pathname,
           method: opts.method || (opts.body ? "PUT" : "GET")
-        }, handler);
+        }, handler2);
       };
     }
     module2.exports.setGlobalDispatcher = setGlobalDispatcher;
@@ -139566,25 +139566,6 @@ function ensureNest() {
 ensureNest().catch((err) => {
   console.error("Error durante la inicializaci\xF3n de NestJS:", err);
 });
-expressApp.use(async (req, res, next) => {
-  try {
-    await ensureNest();
-    if (req.url && !req.url.startsWith("/api")) {
-      req.url = "/api" + req.url;
-    }
-    next();
-  } catch (err) {
-    console.error("Error en middleware NestJS:", err);
-    if (!res.headersSent) {
-      res.statusCode = 500;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({
-        error: "Backend Initialization Error",
-        message: err?.message || String(err)
-      }));
-    }
-  }
-});
 if (!process.env.VERCEL) {
   const server = http.createServer(expressApp);
   const port = Number(process.env.PORT) || 3001;
@@ -139594,9 +139575,29 @@ if (!process.env.VERCEL) {
     logger.log(`API disponible con prefijo /api`);
   });
 }
-exports.default = expressApp;
-module.exports = expressApp;
-module.exports.default = expressApp;
+var handler = async (req, res) => {
+  try {
+    await ensureNest();
+    if (req.url && !req.url.startsWith("/api")) {
+      req.url = "/api" + req.url;
+    }
+    return expressApp(req, res);
+  } catch (err) {
+    console.error("Error cr\xEDtico en handler serverless:", err);
+    if (!res.headersSent) {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({
+        error: "Backend Initialization Error",
+        message: err?.message || String(err),
+        stack: err?.stack || null
+      }));
+    }
+  }
+};
+exports.default = handler;
+module.exports = handler;
+module.exports.default = handler;
 /*! Bundled license information:
 
 reflect-metadata/Reflect.js:

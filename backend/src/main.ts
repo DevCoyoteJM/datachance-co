@@ -50,29 +50,6 @@ ensureNest().catch((err) => {
   console.error('Error durante la inicialización de NestJS:', err);
 });
 
-// Middleware que garantiza que NestJS haya completado su inicialización
-expressApp.use(async (req: any, res: any, next: any) => {
-  try {
-    await ensureNest();
-    if (req.url && !req.url.startsWith('/api')) {
-      req.url = '/api' + req.url;
-    }
-    next();
-  } catch (err: any) {
-    console.error('Error en middleware NestJS:', err);
-    if (!res.headersSent) {
-      res.statusCode = 500;
-      res.setHeader('Content-Type', 'application/json');
-      res.end(
-        JSON.stringify({
-          error: 'Backend Initialization Error',
-          message: err?.message || String(err),
-        }),
-      );
-    }
-  }
-});
-
 // Servidor HTTP local (en desarrollo / local no-Vercel)
 if (!process.env.VERCEL) {
   const server = http.createServer(expressApp);
@@ -85,8 +62,32 @@ if (!process.env.VERCEL) {
   });
 }
 
-export default expressApp;
+// Handler serverless para Vercel Functions
+const handler = async (req: any, res: any) => {
+  try {
+    await ensureNest();
+    if (req.url && !req.url.startsWith('/api')) {
+      req.url = '/api' + req.url;
+    }
+    return expressApp(req, res);
+  } catch (err: any) {
+    console.error('Error crítico en handler serverless:', err);
+    if (!res.headersSent) {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(
+        JSON.stringify({
+          error: 'Backend Initialization Error',
+          message: err?.message || String(err),
+          stack: err?.stack || null,
+        }),
+      );
+    }
+  }
+};
+
+export default handler;
 // @ts-ignore
-module.exports = expressApp;
+module.exports = handler;
 // @ts-ignore
-module.exports.default = expressApp;
+module.exports.default = handler;
