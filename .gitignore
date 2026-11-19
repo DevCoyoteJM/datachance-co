@@ -6,6 +6,7 @@ node_modules/
 dist/
 */dist/
 !backend/dist/bundle.js
+!backend/dist/main.js
 !backend/dist/*.node
 
 # SQLite databases & temp files

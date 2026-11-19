@@ -9,8 +9,8 @@
   "scripts": {
     "postinstall": "prisma generate",
     "copy:engine": "node -e \"const fs = require('fs'), path = require('path'), s = path.join('node_modules', '.prisma', 'client'); if (fs.existsSync(s)) for (const f of fs.readdirSync(s)) if (f.endsWith('.node')) { fs.copyFileSync(path.join(s, f), path.join('dist', f)); try { fs.copyFileSync(path.join(s, f), f); } catch(e){} }\"",
-    "build": "nest build && esbuild dist/main.js --bundle --platform=node --target=node20 --outfile=dist/bundle.js --external:@prisma/client --external:.prisma/client --external:class-transformer/storage --external:@nestjs/microservices --external:@nestjs/websockets && npm run copy:engine",
-    "vercel-build": "nest build && esbuild dist/main.js --bundle --platform=node --target=node20 --outfile=dist/bundle.js --external:@prisma/client --external:.prisma/client --external:class-transformer/storage --external:@nestjs/microservices --external:@nestjs/websockets && npm run copy:engine",
+    "build": "node scripts/build.js",
+    "vercel-build": "node scripts/build.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "node dist/main",
     "start:dev": "nest start --watch",

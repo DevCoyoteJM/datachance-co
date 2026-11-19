@@ -9,12 +9,34 @@ function getHandler() {
   if (handlerInstance) return handlerInstance;
   if (loadError) throw loadError;
 
-  try {
-    const bundlePath = path.resolve(__dirname, 'dist', 'bundle.js');
-    if (!fs.existsSync(bundlePath)) {
-      throw new Error(`bundle.js does not exist at ${bundlePath}. __dirname: ${__dirname}, files: ${JSON.stringify(fs.readdirSync(__dirname))}`);
+  const candidates = [
+    path.join(__dirname, 'dist', 'bundle.js'),
+    path.join(__dirname, 'dist', 'main.js'),
+    path.join(process.cwd(), 'dist', 'bundle.js'),
+    path.join(process.cwd(), 'dist', 'main.js'),
+    path.join(process.cwd(), 'backend', 'dist', 'bundle.js'),
+    path.join(process.cwd(), 'backend', 'dist', 'main.js'),
+  ];
+
+  let resolvedPath = null;
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      resolvedPath = c;
+      break;
     }
-    const bundle = require(bundlePath);
+  }
+
+  if (!resolvedPath) {
+    throw new Error(
+      `Neither bundle.js nor dist/main.js found. Checked candidates: ${JSON.stringify(candidates)}. ` +
+      `__dirname: ${__dirname}, cwd: ${process.cwd()}, ` +
+      `__dirname files: ${JSON.stringify(fs.readdirSync(__dirname))}, ` +
+      `cwd files: ${JSON.stringify(fs.readdirSync(process.cwd()))}`
+    );
+  }
+
+  try {
+    const bundle = require(resolvedPath);
     handlerInstance = typeof bundle === 'function' ? bundle : (bundle.default && typeof bundle.default === 'function' ? bundle.default : bundle);
     return handlerInstance;
   } catch (err) {
