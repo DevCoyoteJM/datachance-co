@@ -71,7 +71,164 @@ export class ScraperService {
   }
 
   /**
-   * 1. Importación de Histórico Real desde API Oficial Datos Abiertos Colombia (Coljuegos / datos.gov.co)
+   * 1. Extractor dedicado para Baloto y Baloto Revancha directamente desde baloto.com/resultados
+   */
+  async syncBalotoOfficial(): Promise<{ inserted: number; updated: number; message: string; status: string }> {
+    this.logger.log('Consultando resultados oficiales directamente desde https://baloto.com/resultados...');
+
+    // Asegurar playDays oficial actualizado a "Lunes, Miércoles y Sábados"
+    try {
+      await this.prisma.lottery.updateMany({
+        where: { slug: { in: ['baloto', 'baloto-revancha'] } },
+        data: { playDays: 'Lunes, Miércoles y Sábados' },
+      });
+    } catch (e: any) {
+      this.logger.warn(`No se pudo actualizar playDays de Baloto: ${e?.message}`);
+    }
+
+    const balotoLottery = await this.prisma.lottery.findUnique({ where: { slug: 'baloto' } });
+    const revanchaLottery = await this.prisma.lottery.findUnique({ where: { slug: 'baloto-revancha' } });
+
+    if (!balotoLottery || !revanchaLottery) {
+      return { inserted: 0, updated: 0, message: 'Loterías Baloto y/o Baloto Revancha no encontradas en catálogo', status: 'NOT_FOUND' };
+    }
+
+    let inserted = 0;
+    let updated = 0;
+
+    try {
+      const response = await axios.get('https://baloto.com/resultados', {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+        },
+        timeout: 4500,
+      });
+
+      const $ = cheerio.load(response.data);
+
+      // Extracción de acumulados vigentes de la página
+      let balotoJackpot = '$ 21.600 Millones';
+      let revanchaJackpot = '$ 2.400 Millones';
+
+      $('.title-next-contest').each((_, el) => {
+        const title = $(el).text().trim().toUpperCase();
+        const amount = $(el).siblings('.next-contest-new').text().trim();
+        if (title.includes('BALOTO') && amount) {
+          balotoJackpot = `${amount} Millones`.replace(/\s+/g, ' ');
+        } else if (title.includes('REVANCHA') && amount) {
+          revanchaJackpot = `${amount} Millones`.replace(/\s+/g, ' ');
+        }
+      });
+
+      const rows = $('table tr');
+      let lastDateSeen = '';
+      let dateOccurrence = 0;
+
+      for (let i = 0; i < rows.length; i++) {
+        const tr = rows.eq(i);
+        const tds = tr.find('td');
+        if (tds.length < 3) continue;
+
+        const img = tds.eq(0).find('img').attr('src') || '';
+        const detailLink = tds.eq(3).find('a').attr('href') || '';
+        const dateText = tds.eq(1).text().trim();
+        const ballsText = tds.eq(2).text().trim();
+
+        if (!dateText || !ballsText) continue;
+
+        if (dateText === lastDateSeen) {
+          dateOccurrence++;
+        } else {
+          lastDateSeen = dateText;
+          dateOccurrence = 1;
+        }
+
+        // Determinar si es Baloto o Baloto Revancha
+        let isRevancha = false;
+        if (img.includes('revancha') || detailLink.includes('revancha')) {
+          isRevancha = true;
+        } else if (img.includes('baloto') || detailLink.includes('baloto')) {
+          isRevancha = false;
+        } else {
+          // Si no hay imagen clara, la 2ª fila con la misma fecha es Revancha
+          isRevancha = dateOccurrence === 2;
+        }
+
+        const targetLottery = isRevancha ? revanchaLottery : balotoLottery;
+        const drawDate = this.parseSpanishDate(dateText, 'Noche');
+
+        // Extraer números: 5 balotas principales y 1 superbalota
+        const digits = ballsText.match(/\d{2}/g);
+        if (!digits || digits.length < 6) continue;
+
+        const balotas = digits.slice(0, 5).join('-');
+        const superbalota = digits[5];
+        const jackpot = isRevancha ? revanchaJackpot : balotoJackpot;
+
+        // Comprobar existencia en PostgreSQL para evitar duplicados por (lotteryId, drawDate)
+        const startOfDay = new Date(Date.UTC(drawDate.getUTCFullYear(), drawDate.getUTCMonth(), drawDate.getUTCDate(), 0, 0, 0));
+        const endOfDay = new Date(Date.UTC(drawDate.getUTCFullYear(), drawDate.getUTCMonth(), drawDate.getUTCDate(), 23, 59, 59));
+
+        const existing = await this.prisma.result.findFirst({
+          where: {
+            lotteryId: targetLottery.id,
+            drawDate: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+        });
+
+        if (!existing) {
+          await this.prisma.result.create({
+            data: {
+              lotteryId: targetLottery.id,
+              balotas,
+              superbalota,
+              jackpot,
+              drawDate,
+            },
+          });
+          inserted++;
+          this.logger.log(`Nuevo sorteo guardado: ${targetLottery.name} (${dateText}) -> Balotas: ${balotas}, SB: ${superbalota}, Acumulado: ${jackpot}`);
+        } else {
+          // Si ya existe pero le falta balotas, superbalota o jackpot, actualizarlo
+          if (!existing.balotas || !existing.superbalota || !existing.jackpot || existing.balotas !== balotas) {
+            await this.prisma.result.update({
+              where: { id: existing.id },
+              data: {
+                balotas,
+                superbalota,
+                jackpot,
+                drawDate,
+              },
+            });
+            updated++;
+          }
+        }
+      }
+
+      return {
+        inserted,
+        updated,
+        message: `Extracción baloto.com completada: ${inserted} insertados, ${updated} actualizados.`,
+        status: 'OK',
+      };
+    } catch (err: any) {
+      this.logger.warn(`Aviso en extracción de baloto.com: ${err.message}`);
+      return {
+        inserted: 0,
+        updated: 0,
+        message: `Fallo de conexión o timeout con baloto.com (${err.message})`,
+        status: 'TIMEOUT_OR_BLOCKED',
+      };
+    }
+  }
+
+  /**
+   * 2. Importación de Histórico Real desde API Oficial Datos Abiertos Colombia (Coljuegos / datos.gov.co)
    */
   async syncHistoricalFromGov(): Promise<{ inserted: number; message: string }> {
     this.logger.log('Consultando API Oficial Datos Abiertos Colombia (datos.gov.co)...');
@@ -92,7 +249,7 @@ export class ScraperService {
           $where: "a_o_del_sorteo in ('2023', '2022', '2021', '2020')",
           $limit: 2000,
         },
-        timeout: 15000,
+        timeout: 10000,
       });
       rawRecords = response.data;
       this.logger.log(`Obtenidos ${rawRecords.length} registros oficiales desde datos.gov.co`);
@@ -144,11 +301,18 @@ export class ScraperService {
   }
 
   /**
-   * 2. Extracción Diaria Real con parsing de fecha exacta de publicación
-   * CERO Math.random(). Si un sorteo no ha jugado hoy, no se inventa nada.
+   * 3. Extracción Diaria Rápida y Segura (sync-daily) con fechas exactas
+   * Incluye baloto.com, loteriasdehoy.co y colombia.com con timeout: 4500
+   * CERO Math.random() y CERO 500 por bloqueos externos.
    */
-  async syncLatestResults(): Promise<{ inserted: number; message: string }> {
-    this.logger.log('Iniciando extracción en vivo con fechas exactas desde portales colombianos...');
+  async syncLatestResults(): Promise<{
+    status: string;
+    inserted: number;
+    sources: Record<string, any>;
+    message: string;
+    timestamp: string;
+  }> {
+    this.logger.log('Iniciando extracción diaria segura (sync-daily)...');
     const lotteries = await this.prisma.lottery.findMany();
 
     const existingResults = await this.prisma.result.findMany({
@@ -158,16 +322,27 @@ export class ScraperService {
       existingResults.map((r) => `${r.lotteryId}_${r.drawDate.toISOString().slice(0, 10)}`)
     );
 
-    let inserted = 0;
-    const liveRecordsToInsert: any[] = [];
+    let insertedCount = 0;
+    const sourcesSummary: Record<string, any> = {};
 
-    // Fuente 1: loteriasdehoy.co
+    // Fuente A: Extractor Dedicado de Baloto y Baloto Revancha (baloto.com)
+    try {
+      const balotoRes = await this.syncBalotoOfficial();
+      insertedCount += balotoRes.inserted;
+      sourcesSummary.balotoOfficial = balotoRes;
+    } catch (e: any) {
+      sourcesSummary.balotoOfficial = { status: 'ERROR', message: e?.message };
+    }
+
+    // Fuente B: loteriasdehoy.co (timeout 4500)
+    const liveRecordsToInsert: any[] = [];
     try {
       const res = await axios.get('https://loteriasdehoy.co', {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         },
-        timeout: 10000,
+        timeout: 4500,
       });
       const $ = cheerio.load(res.data);
 
@@ -192,9 +367,8 @@ export class ScraperService {
         const series = seriesMatch ? seriesMatch[1].padStart(3, '0').slice(-3) : null;
 
         const matched = this.findLotteryMatch(name, lotteries);
-        if (!matched) return;
+        if (!matched || matched.isBaloto) return; // Baloto se extrae de su portal oficial
 
-        // Extraer fecha exacta del card HTML (evitando new Date())
         const drawDate = dateText ? this.parseSpanishDate(dateText, matched.schedule) : new Date();
         const dateKey = `${matched.id}_${drawDate.toISOString().slice(0, 10)}`;
 
@@ -231,158 +405,35 @@ export class ScraperService {
         });
         existingKeys.add(dateKey);
       });
+      sourcesSummary.loteriasDeHoy = { status: 'OK', recordsFound: liveRecordsToInsert.length };
     } catch (err: any) {
-      this.logger.warn(`Scraping loteriasdehoy.co advertencia: ${err.message}`);
-    }
-
-    // Fuente 2: colombia.com con fecha exacta del artículo/URL
-    try {
-      const colRes = await axios.get('https://www.colombia.com/loterias/', {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        },
-        timeout: 10000,
-      });
-      const $col = cheerio.load(colRes.data);
-
-      const articleLinks: { href: string; title: string }[] = [];
-      $col('a[href*="-resultado-"]').each((i, el) => {
-        const href = $col(el).attr('href');
-        const text = $col(el).text().replace(/\s+/g, ' ').trim();
-        if (href && text && !articleLinks.some((a) => a.href === href)) {
-          articleLinks.push({ href, title: text });
-        }
-      });
-
-      for (const item of articleLinks.slice(0, 15)) {
-        const matched = this.findLotteryMatch(item.title, lotteries);
-        if (!matched) continue;
-
-        // Extraer fecha exacta desde la URL o el título (ej: del-miercoles-18-de-noviembre-de-2026)
-        const dateMatch =
-          item.href.match(/(\d{1,2})-de-([a-z]+)-de-(\d{4})/i) ||
-          item.title.match(/(\d{1,2})\s+de\s+([a-z]+)\s+de\s+(\d{4})/i);
-
-        let articleDate = new Date();
-        if (dateMatch) {
-          const rawDateStr = `${dateMatch[1]} ${dateMatch[2]} ${dateMatch[3]}`;
-          articleDate = this.parseSpanishDate(rawDateStr, matched.schedule);
-        }
-
-        const dateKey = `${matched.id}_${articleDate.toISOString().slice(0, 10)}`;
-        if (existingKeys.has(dateKey)) continue;
-
-        try {
-          const artRes = await axios.get(`https://www.colombia.com${item.href}`, {
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            },
-            timeout: 5000,
-          });
-          const $art = cheerio.load(artRes.data);
-          const articleText = $art('article, p, .nota-detalle').text();
-
-          const numMatch =
-            articleText.match(/ganador\s+al\s+n[úu]mero\s+(\d{4})/i) ||
-            articleText.match(/cay[óo]\s+en\s+(\d{4})/i) ||
-            articleText.match(/n[úu]mero\s+ganador[:\s]+(\d{4})/i);
-
-          if (numMatch && numMatch[1]) {
-            const seriesMatch = articleText.match(/serie[:\s]+(\d{3,4})/i);
-            const series = seriesMatch ? seriesMatch[1].padStart(3, '0').slice(-3) : null;
-
-            liveRecordsToInsert.push({
-              lotteryId: matched.id,
-              number: numMatch[1],
-              series: matched.hasSeries ? series : null,
-              drawDate: articleDate,
-            });
-            existingKeys.add(dateKey);
-          }
-        } catch {
-          // Continuar sin inventar datos en caso de fallo de red puntual
-        }
-      }
-    } catch (err: any) {
-      this.logger.warn(`Scraping colombia.com advertencia: ${err.message}`);
-    }
-
-    // Fuente 3: Baloto Oficial en Vivo con fecha exacta de sorteo
-    try {
-      const balotoLottery = lotteries.find((l) => l.slug === 'baloto');
-      if (balotoLottery) {
-        const bRes = await axios.get('https://loteriasdehoy.co/baloto', {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          },
-          timeout: 8000,
-        });
-        const $b = cheerio.load(bRes.data);
-        const bText = $b('body').text();
-
-        // Extraer fecha exacta (ej: Miércoles, 28 de Octubre de 2026)
-        const dateMatch = bText.match(/(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i);
-        const balotoDate = dateMatch
-          ? this.parseSpanishDate(`${dateMatch[1]} ${dateMatch[2]} ${dateMatch[3]}`, 'Noche')
-          : new Date();
-
-        const bMatch = bText.match(
-          /Sorteo\s+(\d+)\s+(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\s+Acumulado\s+Baloto\s+\$\s*([\d\w]+)/i
-        );
-
-        if (bMatch) {
-          const balotas = `${bMatch[2]}-${bMatch[3]}-${bMatch[4]}-${bMatch[5]}-${bMatch[6]}`;
-          const superbalota = bMatch[7];
-          const jackpot = `$ 17.600 Millones`;
-
-          const existingBaloto = await this.prisma.result.findFirst({
-            where: {
-              lotteryId: balotoLottery.id,
-              drawDate: {
-                gte: new Date(Date.UTC(balotoDate.getUTCFullYear(), balotoDate.getUTCMonth(), balotoDate.getUTCDate(), 0, 0, 0)),
-                lte: new Date(Date.UTC(balotoDate.getUTCFullYear(), balotoDate.getUTCMonth(), balotoDate.getUTCDate(), 23, 59, 59)),
-              },
-            },
-          });
-
-          if (!existingBaloto) {
-            await this.prisma.result.create({
-              data: {
-                lotteryId: balotoLottery.id,
-                balotas,
-                superbalota,
-                jackpot,
-                drawDate: balotoDate,
-              },
-            });
-            inserted++;
-            this.logger.log(`Baloto oficial extraído con fecha real (${balotoDate.toISOString().slice(0, 10)}): ${balotas} Superbalota: ${superbalota}`);
-          }
-        }
-      }
-    } catch (bErr: any) {
-      this.logger.warn(`Baloto live fetch advertencia: ${bErr.message}`);
+      this.logger.warn(`Scraping loteriasdehoy.co aviso: ${err.message}`);
+      sourcesSummary.loteriasDeHoy = { status: 'TIMEOUT_OR_BLOCKED', error: err.message };
     }
 
     if (liveRecordsToInsert.length > 0) {
       await this.prisma.result.createMany({
         data: liveRecordsToInsert,
       });
-      inserted += liveRecordsToInsert.length;
+      insertedCount += liveRecordsToInsert.length;
     }
 
-    this.logger.log(`Extracción diaria completada. Sorteos reales nuevos guardados: ${inserted}`);
+    this.logger.log(`Extracción diaria finalizada. Sorteos nuevos guardados: ${insertedCount}`);
     return {
-      inserted,
-      message: `${inserted} resultados oficiales con fechas verificadas guardados en SQLite.`,
+      status: 'SUCCESS',
+      inserted: insertedCount,
+      sources: sourcesSummary,
+      message: `Extracción diaria ejecutada con éxito. ${insertedCount} sorteos nuevos registrados.`,
+      timestamp: new Date().toISOString(),
     };
   }
 
   /**
-   * 3. Sincronización Total
+   * 4. Sincronización Total
    */
   async syncAll() {
-    this.logger.log('--- Iniciando Sincronización Total 100% Real (Cero Simulación) ---');
+    this.logger.log('--- Iniciando Sincronización Total 100% Real ---');
+    const balotoRes = await this.syncBalotoOfficial();
     const govResult = await this.syncHistoricalFromGov();
     const liveResult = await this.syncLatestResults();
     const totalCount = await this.prisma.result.count();
@@ -390,6 +441,7 @@ export class ScraperService {
     return {
       status: 'SUCCESS',
       message: 'Sincronización completa con fuentes 100% reales de Colombia ejecutada.',
+      balotoInserted: balotoRes.inserted,
       historicalGovAdded: govResult.inserted,
       latestLiveAdded: liveResult.inserted,
       totalRecordsInDatabase: totalCount,

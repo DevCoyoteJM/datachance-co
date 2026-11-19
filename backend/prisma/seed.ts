@@ -71,8 +71,8 @@ const LOTTERIES_DATA: LotterySeed[] = [
   { name: 'Súper Astro Luna', slug: 'super-astro-luna', category: 'ESPECIAL', schedule: 'Noche', playDays: 'Diario', hasZodiac: true },
 
   // Baloto y Revancha
-  { name: 'Baloto', slug: 'baloto', category: 'BALOTO', schedule: 'Noche', playDays: 'Miércoles y Sábados', isBaloto: true },
-  { name: 'Baloto Revancha', slug: 'baloto-revancha', category: 'BALOTO', schedule: 'Noche', playDays: 'Miércoles y Sábados', isBaloto: true },
+  { name: 'Baloto', slug: 'baloto', category: 'BALOTO', schedule: 'Noche', playDays: 'Lunes, Miércoles y Sábados', isBaloto: true },
+  { name: 'Baloto Revancha', slug: 'baloto-revancha', category: 'BALOTO', schedule: 'Noche', playDays: 'Lunes, Miércoles y Sábados', isBaloto: true },
 ];
 
 async function main() {
