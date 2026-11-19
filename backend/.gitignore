@@ -1,6 +1,7 @@
 node_modules/
 dist/
 !dist/bundle.js
+!dist/*.node
 *.log
 .env
 dev.db-journal
