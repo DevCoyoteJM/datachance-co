@@ -14,7 +14,7 @@
       "buildCommand": "npx prisma generate && npm run build",
       "functions": {
         "dist/bundle.js": {
-          "includeFiles": "node_modules/*prisma*/**"
+          "includeFiles": "node_modules/.prisma/**"
         }
       }
     },

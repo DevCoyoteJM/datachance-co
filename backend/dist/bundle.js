@@ -81997,10 +81997,6 @@ var require_client = __commonJS({
           },
           {
             "fromEnvVar": null,
-            "value": "rhel-openssl-1.0.x"
-          },
-          {
-            "fromEnvVar": null,
             "value": "rhel-openssl-3.0.x"
           }
         ],
@@ -82027,8 +82023,8 @@ var require_client = __commonJS({
           }
         }
       },
-      "inlineSchema": 'generator client {\n  provider      = "prisma-client-js"\n  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x"]\n}\n\ndatasource db {\n  provider  = "postgresql"\n  url       = env("DATABASE_URL")\n  directUrl = env("DIRECT_URL")\n}\n\nmodel Lottery {\n  id        Int      @id @default(autoincrement())\n  name      String\n  slug      String   @unique\n  category  String // "LOTERIA" | "CHANCE" | "ESPECIAL" | "BALOTO"\n  schedule  String // "Ma\xF1ana" | "Tarde" | "Noche" | "22:30"\n  playDays  String // "Diario", "Lunes", "Mi\xE9rcoles y S\xE1bados", etc.\n  hasSeries Boolean  @default(false)\n  hasZodiac Boolean  @default(false)\n  isBaloto  Boolean  @default(false)\n  results   Result[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Result {\n  id          Int      @id @default(autoincrement())\n  lotteryId   Int\n  lottery     Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)\n  number      String? // 4 d\xEDgitos ej: "0492"\n  series      String? // 3 d\xEDgitos ej: "128"\n  zodiacSign  String? // ej: "Tauro"\n  balotas     String? // ej: "04-12-23-35-42"\n  superbalota String? // ej: "08"\n  jackpot     String? // ej: "$ 17.500 Millones"\n  drawDate    DateTime\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  @@index([lotteryId])\n  @@index([drawDate])\n}\n',
-      "inlineSchemaHash": "1b65c9537ec09dd949c4283abd0fb9ec2a7c216f5e88da1aa8958119b618395c",
+      "inlineSchema": 'generator client {\n  provider      = "prisma-client-js"\n  binaryTargets = ["native", "rhel-openssl-3.0.x"]\n}\n\ndatasource db {\n  provider  = "postgresql"\n  url       = env("DATABASE_URL")\n  directUrl = env("DIRECT_URL")\n}\n\nmodel Lottery {\n  id        Int      @id @default(autoincrement())\n  name      String\n  slug      String   @unique\n  category  String // "LOTERIA" | "CHANCE" | "ESPECIAL" | "BALOTO"\n  schedule  String // "Ma\xF1ana" | "Tarde" | "Noche" | "22:30"\n  playDays  String // "Diario", "Lunes", "Mi\xE9rcoles y S\xE1bados", etc.\n  hasSeries Boolean  @default(false)\n  hasZodiac Boolean  @default(false)\n  isBaloto  Boolean  @default(false)\n  results   Result[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Result {\n  id          Int      @id @default(autoincrement())\n  lotteryId   Int\n  lottery     Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)\n  number      String? // 4 d\xEDgitos ej: "0492"\n  series      String? // 3 d\xEDgitos ej: "128"\n  zodiacSign  String? // ej: "Tauro"\n  balotas     String? // ej: "04-12-23-35-42"\n  superbalota String? // ej: "08"\n  jackpot     String? // ej: "$ 17.500 Millones"\n  drawDate    DateTime\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  @@index([lotteryId])\n  @@index([drawDate])\n}\n',
+      "inlineSchemaHash": "58256a9336516e7cf15bf795483556c1f70564ac3ca7788ae3bc9b978ec8e010",
       "copyEngine": true
     };
     var fs = require("fs");
@@ -82058,8 +82054,6 @@ var require_client = __commonJS({
     Object.assign(exports2, Prisma);
     path.join(__dirname, "query_engine-windows.dll.node");
     path.join(process.cwd(), "node_modules/.prisma/client/query_engine-windows.dll.node");
-    path.join(__dirname, "libquery_engine-rhel-openssl-1.0.x.so.node");
-    path.join(process.cwd(), "node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node");
     path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
     path.join(process.cwd(), "node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node");
     path.join(__dirname, "schema.prisma");
@@ -145499,7 +145493,6 @@ var handler = (req, res) => {
     });
   });
 };
-exports.default = handler;
 module.exports = handler;
 module.exports.default = handler;
 /*! Bundled license information:

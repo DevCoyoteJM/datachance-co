@@ -85,7 +85,7 @@ const handler = (req: any, res: any) => {
   });
 };
 
-export default handler;
+// Exportación CommonJS pura para Vercel Serverless
 // @ts-ignore
 module.exports = handler;
 // @ts-ignore
