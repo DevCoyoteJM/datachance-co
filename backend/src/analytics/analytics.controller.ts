@@ -33,6 +33,16 @@ export class AnalyticsController {
     return this.analyticsService.getDailyInsights(slug);
   }
 
+  @Get('audit-ranking')
+  async getAuditRanking() {
+    return this.analyticsService.getAuditRanking();
+  }
+
+  @Get('patterns/:slug')
+  async getSpecialPatterns(@Param('slug') slug: string) {
+    return this.analyticsService.getSpecialPatterns(slug);
+  }
+
   @Get('check-number/:number')
   async checkNumber(@Param('number') number: string) {
     return this.analyticsService.checkNumberGlobal(number);

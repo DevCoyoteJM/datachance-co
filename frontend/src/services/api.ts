@@ -8,6 +8,8 @@ import type {
   DailyInsights,
   LotteryHistoryResponse,
   CheckNumberResponse,
+  SpecialPatternsResponse,
+  AuditRankingResponse,
 } from '../types';
 
 const API_BASE = '/api';
@@ -110,6 +112,18 @@ export const api = {
     if (!res.ok) throw new Error('Error al calcular premios');
     const data = await res.json();
     return Array.isArray(data) ? data : [data];
+  },
+
+  async getSpecialPatterns(slug: string): Promise<SpecialPatternsResponse> {
+    const res = await fetch(`${API_BASE}/analytics/patterns/${slug}`);
+    if (!res.ok) throw new Error(`Error al cargar patrones para ${slug}`);
+    return res.json();
+  },
+
+  async getAuditRanking(): Promise<AuditRankingResponse> {
+    const res = await fetch(`${API_BASE}/analytics/audit-ranking`);
+    if (!res.ok) throw new Error('Error al cargar ranking de auditoría');
+    return res.json();
   },
 
   async triggerSync(): Promise<{ status: string; message: string; newResultsCount: number }> {

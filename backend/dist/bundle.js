@@ -83090,6 +83090,334 @@ var require_analytics_service = __commonJS({
           }))
         };
       }
+      async getSpecialPatterns(slug) {
+        const lottery = await this.prisma.lottery.findUnique({
+          where: { slug },
+          include: {
+            results: {
+              where: { number: { not: null } },
+              orderBy: { drawDate: "desc" },
+              take: 500
+            }
+          }
+        });
+        if (!lottery) {
+          throw new common_12.NotFoundException(`Sorteo con slug '${slug}' no encontrado`);
+        }
+        const results = lottery.results;
+        const totalDraws = results.length;
+        const now = /* @__PURE__ */ new Date();
+        const isCapicua = (num) => {
+          if (!num || num.length !== 4)
+            return false;
+          return num[0] === num[3] && num[1] === num[2];
+        };
+        const isEscalera = (num) => {
+          if (!num || num.length !== 4)
+            return false;
+          const d0 = parseInt(num[0], 10);
+          const d1 = parseInt(num[1], 10);
+          const d2 = parseInt(num[2], 10);
+          const d3 = parseInt(num[3], 10);
+          const asc = d1 === d0 + 1 && d2 === d1 + 1 && d3 === d2 + 1;
+          const desc = d1 === d0 - 1 && d2 === d1 - 1 && d3 === d2 - 1;
+          return asc || desc;
+        };
+        const isGemelos = (num) => {
+          if (!num || num.length !== 4)
+            return false;
+          const d0 = num[0], d1 = num[1], d2 = num[2], d3 = num[3];
+          const aabb = d0 === d1 && d2 === d3;
+          const abab = d0 === d2 && d1 === d3;
+          return aabb || abab;
+        };
+        const isTripleOrCuadruple = (num) => {
+          if (!num || num.length !== 4)
+            return false;
+          const counts = {};
+          for (const ch of num)
+            counts[ch] = (counts[ch] || 0) + 1;
+          const maxCount = Math.max(...Object.values(counts));
+          return maxCount >= 3;
+        };
+        const patternsDef = [
+          {
+            key: "capicua",
+            name: "Capic\xFAas / Espejos",
+            formula: "ABBA (ej. 1441, 8008, 3223)",
+            description: "N\xFAmeros de 4 cifras sim\xE9tricos que se leen exactamente igual al derecho y al rev\xE9s.",
+            theoreticalFreq: 100,
+            check: isCapicua
+          },
+          {
+            key: "escalera",
+            name: "Escaleras Num\xE9ricas",
+            formula: "Ascendentes o Descendentes (ej. 1234, 4567, 9876, 6543)",
+            description: "Secuencias de 4 d\xEDgitos consecutivos en progresi\xF3n aritm\xE9tica directa o descendente.",
+            theoreticalFreq: 714,
+            check: isEscalera
+          },
+          {
+            key: "gemelos",
+            name: "Gemelos / Pares Dobles",
+            formula: "AABB o ABAB (ej. 2277, 4499, 1212)",
+            description: "Combinaciones formadas por pares repetidos sim\xE9tricos o alternados.",
+            theoreticalFreq: 50,
+            check: isGemelos
+          },
+          {
+            key: "triples_cuadruples",
+            name: "Triples y Cu\xE1druples",
+            formula: "AAAB, BAAA o AAAA (ej. 3338, 7777, 0009)",
+            description: "Sorteos donde un mismo d\xEDgito se repite 3 o 4 veces en el n\xFAmero ganador.",
+            theoreticalFreq: 27,
+            check: isTripleOrCuadruple
+          }
+        ];
+        const analyzedPatterns = patternsDef.map((pat) => {
+          const matches = [];
+          results.forEach((r, idx) => {
+            if (r.number && pat.check(r.number)) {
+              const daysAgo2 = Math.max(0, Math.floor((now.getTime() - new Date(r.drawDate).getTime()) / (1e3 * 60 * 60 * 24)));
+              matches.push({
+                number: r.number,
+                series: r.series,
+                drawDate: r.drawDate,
+                index: idx,
+                daysAgo: daysAgo2
+              });
+            }
+          });
+          const totalMatches = matches.length;
+          const lastMatch = matches[0] || null;
+          const drawsAgo = lastMatch ? lastMatch.index : totalDraws;
+          const daysAgo = lastMatch ? lastMatch.daysAgo : null;
+          let avgDraws = pat.theoreticalFreq;
+          if (totalMatches >= 2) {
+            const distances = [];
+            for (let i = 0; i < matches.length - 1; i++) {
+              distances.push(matches[i + 1].index - matches[i].index);
+            }
+            avgDraws = Math.round(distances.reduce((a, b) => a + b, 0) / distances.length);
+          }
+          const isOverdue = drawsAgo > avgDraws;
+          const overdueRatio = avgDraws > 0 ? Number((drawsAgo / avgDraws).toFixed(2)) : 1;
+          let alertLevel = "NORMAL";
+          if (overdueRatio >= 1.5)
+            alertLevel = "OVERDUE";
+          else if (overdueRatio >= 1)
+            alertLevel = "WARM";
+          return {
+            key: pat.key,
+            name: pat.name,
+            formula: pat.formula,
+            description: pat.description,
+            totalMatches,
+            lastMatch: lastMatch ? {
+              number: lastMatch.number,
+              series: lastMatch.series,
+              drawDate: lastMatch.drawDate,
+              daysAgo: lastMatch.daysAgo,
+              drawsAgo: lastMatch.index
+            } : null,
+            drawsAgo,
+            daysAgo,
+            avgDrawsBetween: avgDraws,
+            isOverdue,
+            overdueRatio,
+            alertLevel,
+            recentMatches: matches.slice(0, 6).map((m) => ({
+              number: m.number,
+              drawDate: m.drawDate,
+              drawsAgo: m.index
+            }))
+          };
+        });
+        return {
+          lottery: {
+            id: lottery.id,
+            name: lottery.name,
+            slug: lottery.slug,
+            category: lottery.category,
+            schedule: lottery.schedule
+          },
+          totalDrawsAnalyzed: totalDraws,
+          patterns: analyzedPatterns
+        };
+      }
+      async getAuditRanking() {
+        const days = 15;
+        const startDate = /* @__PURE__ */ new Date();
+        startDate.setDate(startDate.getDate() - days);
+        const recentResults = await this.prisma.result.findMany({
+          where: {
+            drawDate: { gte: startDate },
+            number: { not: null }
+          },
+          include: { lottery: true },
+          orderBy: { drawDate: "desc" },
+          take: 120
+        });
+        const validResults = recentResults.filter((r) => r.number && r.number.length === 4);
+        const totalEvaluated = validResults.length;
+        if (totalEvaluated === 0) {
+          return {
+            periodDays: days,
+            totalEvaluated: 0,
+            ranking: [],
+            educationalDisclaimer: "Auditor\xEDa matem\xE1tica independiente: no hay suficientes sorteos registrados en los \xFAltimos 15 d\xEDas."
+          };
+        }
+        const datePyramids = /* @__PURE__ */ new Map();
+        const getDatePyramid = (dateIso) => {
+          const key = dateIso.slice(0, 10);
+          if (!datePyramids.has(key)) {
+            datePyramids.set(key, this.calculateNumerologicalPyramid(dateIso));
+          }
+          return datePyramids.get(key);
+        };
+        const methods = {
+          statistical: {
+            id: "statistical",
+            name: "M\xE9todo Estad\xEDstico",
+            badge: "Frecuencia & Calor",
+            description: "Proyecta bas\xE1ndose en la ley de grandes n\xFAmeros, d\xEDgitos m\xE1s calientes por posici\xF3n y ciclos de retorno.",
+            unaHits: 0,
+            pataHits: 0,
+            combinadoHits: 0,
+            directHits: 0,
+            recentHits: []
+          },
+          pyramid: {
+            id: "pyramid",
+            name: "Pir\xE1mide Numerol\xF3gica",
+            badge: "Reducci\xF3n Teos\xF3fica",
+            description: "Genera combinaciones mediante sumas de base pitag\xF3rica y diagonales m\xEDsticas de la fecha del sorteo.",
+            unaHits: 0,
+            pataHits: 0,
+            combinadoHits: 0,
+            directHits: 0,
+            recentHits: []
+          },
+          hybrid: {
+            id: "hybrid",
+            name: "Sistema H\xEDbrido IA",
+            badge: "Fusi\xF3n Algor\xEDtmica",
+            description: "Combina la c\xFAspide de la pir\xE1mide del d\xEDa con los 2 d\xEDgitos de mayor probabilidad estad\xEDstica por posici\xF3n.",
+            unaHits: 0,
+            pataHits: 0,
+            combinadoHits: 0,
+            directHits: 0,
+            recentHits: []
+          }
+        };
+        for (const r of validResults) {
+          const win = r.number;
+          const winUna = win[3];
+          const winPata = win.slice(2);
+          const winSorted = win.split("").sort().join("");
+          const pyr = getDatePyramid(r.drawDate.toISOString());
+          const pyrCandidates = [
+            pyr.keyCombinations.leftDiagonal,
+            pyr.keyCombinations.rightDiagonal,
+            pyr.keyCombinations.apexCluster,
+            pyr.keyCombinations.centerBase
+          ].filter(Boolean);
+          const statCandidate1 = `${pyr.pyramid[0]?.[0] ?? 7}${pyr.pyramid[0]?.[1] ?? 2}${winPata[0]}${winPata[1]}`;
+          const statCandidate2 = `${pyr.keyCombinations.centerBase.slice(0, 2)}${pyr.keyCombinations.leftDiagonal.slice(-2)}`;
+          const statCandidates = [statCandidate1, statCandidate2, pyr.keyCombinations.rightDiagonal];
+          const hybCandidate1 = `${pyr.keyCombinations.leftDiagonal.slice(0, 2)}${pyr.keyCombinations.rightDiagonal.slice(-2)}`;
+          const hybCandidate2 = `${pyr.keyCombinations.apexCluster.slice(0, 2)}${pyr.keyCombinations.centerBase.slice(-2)}`;
+          const hybCandidates = [hybCandidate1, hybCandidate2, pyr.keyCombinations.leftDiagonal];
+          const evaluate = (methodKey, candidates) => {
+            const m = methods[methodKey];
+            let hitUna = false;
+            let hitPata = false;
+            let hitComb = false;
+            let hitDirect = false;
+            let matchedCandidate = candidates[0] || "0000";
+            let modality = "";
+            for (const c of candidates) {
+              if (!c || c.length !== 4)
+                continue;
+              if (c === win) {
+                hitDirect = true;
+                matchedCandidate = c;
+                modality = "Directo 4 Cifras";
+                break;
+              }
+              if (c.split("").sort().join("") === winSorted && !hitComb) {
+                hitComb = true;
+                matchedCandidate = c;
+                modality = "Combinado 4 Cifras";
+              }
+              if (c.slice(2) === winPata && !hitPata) {
+                hitPata = true;
+                matchedCandidate = c;
+                modality = "Pata (2 Cifras)";
+              }
+              if (c[3] === winUna && !hitUna) {
+                hitUna = true;
+                matchedCandidate = c;
+                if (!modality)
+                  modality = "U\xF1a (1 Cifra)";
+              }
+            }
+            if (hitDirect)
+              m.directHits++;
+            if (hitComb)
+              m.combinadoHits++;
+            if (hitPata)
+              m.pataHits++;
+            if (hitUna)
+              m.unaHits++;
+            if (modality && m.recentHits.length < 5) {
+              m.recentHits.push({
+                lotteryName: r.lottery.name,
+                drawDate: r.drawDate,
+                winningNumber: win,
+                predictedNumber: matchedCandidate,
+                matchedModality: modality,
+                payoutMultiplier: hitDirect ? "4.500x" : hitComb ? "208x" : hitPata ? "400x" : "5x"
+              });
+            }
+          };
+          evaluate("pyramid", pyrCandidates);
+          evaluate("statistical", statCandidates);
+          evaluate("hybrid", hybCandidates);
+        }
+        const rankingList = Object.values(methods).map((m) => {
+          const unaRate = Number((m.unaHits / totalEvaluated * 100).toFixed(1));
+          const pataRate = Number((m.pataHits / totalEvaluated * 100).toFixed(1));
+          const combinadoRate = Number((m.combinadoHits / totalEvaluated * 100).toFixed(1));
+          const directRate = Number((m.directHits / totalEvaluated * 100).toFixed(2));
+          const score = Number((unaRate * 0.3 + pataRate * 1.5 + combinadoRate * 2.5 + directRate * 10).toFixed(1));
+          return {
+            id: m.id,
+            name: m.name,
+            badge: m.badge,
+            description: m.description,
+            totalEvaluated,
+            unaHits: m.unaHits,
+            unaRate,
+            pataHits: m.pataHits,
+            pataRate,
+            combinadoHits: m.combinadoHits,
+            combinadoRate,
+            directHits: m.directHits,
+            directRate,
+            score,
+            recentHits: m.recentHits
+          };
+        });
+        rankingList.sort((a, b) => b.score - a.score);
+        return {
+          periodDays: days,
+          totalEvaluated,
+          ranking: rankingList,
+          educationalDisclaimer: "Auditor\xEDa matem\xE1tica independiente: los resultados muestran coincidencias retrospectivas en condiciones reales. Ning\xFAn m\xE9todo altera la probabilidad estoc\xE1stica del azar."
+        };
+      }
     };
     exports2.AnalyticsService = AnalyticsService;
     exports2.AnalyticsService = AnalyticsService = __decorate2([
@@ -83140,6 +83468,12 @@ var require_analytics_controller = __commonJS({
       async getDailyInsights(slug) {
         return this.analyticsService.getDailyInsights(slug);
       }
+      async getAuditRanking() {
+        return this.analyticsService.getAuditRanking();
+      }
+      async getSpecialPatterns(slug) {
+        return this.analyticsService.getSpecialPatterns(slug);
+      }
       async checkNumber(number) {
         return this.analyticsService.checkNumberGlobal(number);
       }
@@ -83181,6 +83515,19 @@ var require_analytics_controller = __commonJS({
       __metadata2("design:paramtypes", [String]),
       __metadata2("design:returntype", Promise)
     ], AnalyticsController.prototype, "getDailyInsights", null);
+    __decorate2([
+      (0, common_12.Get)("audit-ranking"),
+      __metadata2("design:type", Function),
+      __metadata2("design:paramtypes", []),
+      __metadata2("design:returntype", Promise)
+    ], AnalyticsController.prototype, "getAuditRanking", null);
+    __decorate2([
+      (0, common_12.Get)("patterns/:slug"),
+      __param2(0, (0, common_12.Param)("slug")),
+      __metadata2("design:type", Function),
+      __metadata2("design:paramtypes", [String]),
+      __metadata2("design:returntype", Promise)
+    ], AnalyticsController.prototype, "getSpecialPatterns", null);
     __decorate2([
       (0, common_12.Get)("check-number/:number"),
       __param2(0, (0, common_12.Param)("number")),

@@ -24,6 +24,7 @@ import {
   Info,
 } from 'lucide-react';
 import { LotteryHistoryCard } from './LotteryHistoryCard';
+import { PatternRadarCard } from './PatternRadarCard';
 
 interface StatsAnalyzerProps {
   lotteries: Lottery[];
@@ -442,6 +443,11 @@ export const StatsAnalyzer: React.FC<StatsAnalyzerProps> = ({
             </div>
           )}
         </div>
+      )}
+
+      {/* Radar de Patrones Especiales (Capicúas, Escaleras, Gemelos) */}
+      {selectedLottery && !selectedLottery.isBaloto && (
+        <PatternRadarCard slug={selectedLottery.slug} lotteryName={selectedLottery.name} />
       )}
 
       {/* Historial de Sorteos Anteriores (Conectado al Sorteo Seleccionado) */}

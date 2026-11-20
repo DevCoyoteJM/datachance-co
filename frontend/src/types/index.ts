@@ -216,9 +216,110 @@ export interface SavedPlay {
   id: string;
   number: string;
   type: '4_CIFRAS' | 'PATA' | 'BALOTO';
-  source: 'ESTADISTICO' | 'PIRAMIDE' | 'HIBRIDO' | 'DATOS_DEL_DIA' | 'MANUAL';
+  source: 'ESTADISTICO' | 'PIRAMIDE' | 'HIBRIDO' | 'DATOS_DEL_DIA' | 'MANUAL' | 'ALMANAQUE_SUENOS' | 'RUEDA_NUMERICA';
   lotteryName?: string;
   superbalota?: string;
   savedAt: string;
   notes?: string;
+}
+
+// 1. Radar de Patrones Especiales (Gemelos, Escaleras, Capicúas)
+export interface PatternLastMatch {
+  number: string;
+  series?: string | null;
+  drawDate: string;
+  daysAgo: number | null;
+  drawsAgo: number;
+}
+
+export interface PatternRecentMatch {
+  number: string;
+  drawDate: string;
+  drawsAgo: number;
+}
+
+export interface SpecialPatternItem {
+  key: string;
+  name: string;
+  formula: string;
+  description: string;
+  totalMatches: number;
+  lastMatch: PatternLastMatch | null;
+  drawsAgo: number;
+  daysAgo: number | null;
+  avgDrawsBetween: number;
+  isOverdue: boolean;
+  overdueRatio: number;
+  alertLevel: 'NORMAL' | 'WARM' | 'OVERDUE';
+  recentMatches: PatternRecentMatch[];
+}
+
+export interface SpecialPatternsResponse {
+  lottery: {
+    id: number;
+    name: string;
+    slug: string;
+    category: string;
+    schedule: string;
+  };
+  totalDrawsAnalyzed: number;
+  patterns: SpecialPatternItem[];
+}
+
+// 2. Ranking de Efectividad de Métodos (Auditoría Pública)
+export interface AuditRecentHit {
+  lotteryName: string;
+  drawDate: string;
+  winningNumber: string;
+  predictedNumber: string;
+  matchedModality: string;
+  payoutMultiplier: string;
+}
+
+export interface AuditMethodItem {
+  id: string;
+  name: string;
+  badge: string;
+  description: string;
+  totalEvaluated: number;
+  unaHits: number;
+  unaRate: number;
+  pataHits: number;
+  pataRate: number;
+  combinadoHits: number;
+  combinadoRate: number;
+  directHits: number;
+  directRate: number;
+  score: number;
+  recentHits: AuditRecentHit[];
+}
+
+export interface AuditRankingResponse {
+  periodDays: number;
+  totalEvaluated: number;
+  ranking: AuditMethodItem[];
+  educationalDisclaimer: string;
+}
+
+// 3. Almanaque de Agüeros y Sueños
+export interface DreamItem {
+  keyword: string;
+  category: 'Animales' | 'Naturaleza' | 'Dinero & Prosperidad' | 'Familia & Vida' | 'Sucesos & Emociones' | 'Objetos & Cotidiano';
+  number: string;
+  pata: string;
+  meaning: string;
+  icon?: string;
+}
+
+// 4. Generador de Combinaciones (Desdoblamiento / Rueda Numérica)
+export interface WheelCombinationResult {
+  digits: number[];
+  combinationLength: 3 | 4;
+  allowRepeats: boolean;
+  combinations: string[];
+  totalCombinations: number;
+  betPerLine: number;
+  totalCost: number;
+  potentialDirectPrize: number;
+  potentialCombinadoPrize: number;
 }

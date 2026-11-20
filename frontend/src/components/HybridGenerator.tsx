@@ -16,8 +16,11 @@ import {
   ShieldCheck,
   Award,
   Bookmark,
+  Shuffle,
 } from 'lucide-react';
 import { savedPlaysService } from '../services/savedPlays';
+import { WheelCombinatorCard } from './WheelCombinatorCard';
+import { MethodAuditCard } from './MethodAuditCard';
 
 interface HybridGeneratorProps {
   lotteries: Lottery[];
@@ -30,6 +33,7 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
   selectedLottery,
   onSelectLottery,
 }) => {
+  const [activeTool, setActiveTool] = useState<'models' | 'wheel' | 'audit'>('models');
   const [activeMode, setActiveMode] = useState<'statistical' | 'pyramid' | 'hybrid'>('hybrid');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -147,8 +151,53 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
         </div>
       </div>
 
-      {/* Mode Selector Tabs */}
+      {/* Selector Principal de Herramientas: Modelos IA vs Rueda Numérica vs Auditoría */}
       <div className="flex items-center gap-2 p-1.5 bg-[#151C2C] rounded-2xl border border-white/10 overflow-x-auto">
+        <button
+          onClick={() => setActiveTool('models')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
+            activeTool === 'models'
+              ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 shadow-glowGold'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Modelos Predictivos (IA & Pirámide)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTool('wheel')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
+            activeTool === 'wheel'
+              ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-white shadow-glowGreen'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Shuffle className="w-4 h-4" />
+          <span>Rueda Numérica (Desdoblamiento)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTool('audit')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
+            activeTool === 'audit'
+              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <ShieldCheck className="w-4 h-4" />
+          <span>Ranking de Auditoría Pública</span>
+        </button>
+      </div>
+
+      {activeTool === 'wheel' && <WheelCombinatorCard />}
+
+      {activeTool === 'audit' && <MethodAuditCard />}
+
+      {activeTool === 'models' && (
+        <>
+          {/* Mode Selector Tabs */}
+          <div className="flex items-center gap-2 p-1.5 bg-[#151C2C] rounded-2xl border border-white/10 overflow-x-auto">
         <button
           onClick={() => setActiveMode('hybrid')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
@@ -541,6 +590,13 @@ export const HybridGenerator: React.FC<HybridGeneratorProps> = ({
           </div>
         </div>
       ) : null}
+
+          {/* Panel de Auditoría Pública al final de los modelos */}
+          <div className="pt-4">
+            <MethodAuditCard />
+          </div>
+        </>
+      )}
     </div>
   );
 };

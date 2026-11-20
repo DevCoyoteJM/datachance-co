@@ -7,6 +7,7 @@ import type {
 } from '../types';
 import { DailyInsightsCard } from './DailyInsightsCard';
 import { GlobalNumberChecker } from './GlobalNumberChecker';
+import { DreamsAlmanacCard } from './DreamsAlmanacCard';
 import {
   Search,
   Filter,
@@ -109,6 +110,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       {/* Buscador Global "Verifica tu Número" (Historial 360° Colombia) */}
       <GlobalNumberChecker />
+
+      {/* Almanaque de Agüeros y Sueños — Tabla de la Suerte de Colombia */}
+      <DreamsAlmanacCard />
 
       {/* Filter and Search Bar */}
       <div className="space-y-4">
